@@ -6,14 +6,21 @@ import javax.persistence.*;
 @Table(name = "company")
 public class Company {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @OneToOne
     @JoinColumn(name = "id_user")
     private User user_create;
+    @Column(nullable = false)
     private String email;
+    @Column(nullable = false)
     private String company_name;
 
     public Company() {
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
@@ -28,7 +35,8 @@ public class Company {
         this.cnpj = cnpj;
     }
 
-    public int getId() {
+
+    public long getId() {
         return id;
     }
 

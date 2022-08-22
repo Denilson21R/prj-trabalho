@@ -10,7 +10,7 @@ import java.util.List;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private final LocalDateTime date;
     @ManyToOne
     @JoinColumn(name = "employee_execute_id")
@@ -18,12 +18,16 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "employee_schedule_id")
     private final User employee_schedule;
+    @OneToMany
     private List<Service> service; //TODO: ver como usar listas aqui
     @ManyToOne
     @JoinColumn(name = "animal_id")
     private final Animal animal;
+    @Column(nullable = false)
     private Status status; //TODO: ver como retornar Enum na API
+    @Column(nullable = false)
     private boolean paid;
+    @Column(nullable = false)
     private float amount; //TODO: nao usar tipo primitivo
 
     public Schedule(LocalDateTime date, User employee_execute, User employee_schedule, List<Service> service, Animal animal, float amount, boolean paid) {
@@ -37,7 +41,7 @@ public class Schedule {
         this.status = Status.NOVO;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,7 +53,7 @@ public class Schedule {
         this.service = service;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

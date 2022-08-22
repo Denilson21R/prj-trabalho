@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
+    @Column(nullable = false)
     private String email;
     private String password; //TODO: hash
     private String phone; //TODO: não usar tipo primitivo
@@ -22,7 +23,7 @@ public class User {
         this.type = type;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -49,7 +50,7 @@ public class User {
     public User() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

@@ -7,13 +7,15 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "note")
 public class Note {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String text;
     @ManyToOne
     @JoinColumn(name = "id_user")
     private final User writer;
     private final LocalDateTime date;
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name = "id_schedule")
     private final Schedule schedule;
 
@@ -24,7 +26,7 @@ public class Note {
         this.schedule = schedule;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -32,7 +34,7 @@ public class Note {
         this.text = text;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

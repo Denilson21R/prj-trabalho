@@ -6,11 +6,14 @@ import javax.persistence.*;
 @Table(name = "animal")
 public class Animal {
     @Id
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     @ManyToOne
     @JoinColumn(name = "id_user")
     private User owner;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String specie;
     private String description;
 
@@ -24,7 +27,7 @@ public class Animal {
         this.description = description;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -36,7 +39,7 @@ public class Animal {
         this.description = description;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

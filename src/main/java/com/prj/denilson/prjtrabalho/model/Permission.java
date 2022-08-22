@@ -7,12 +7,15 @@ import javax.persistence.*;
 public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     @OneToOne
     @JoinColumn(name = "id_user")
     private final User user;
+    @Column(nullable = false)
     private boolean can_login;
+    @Column(nullable = false)
     private boolean can_add_services;
+    @Column(nullable = false)
     private boolean can_add_schedules;
 
     public Permission(User user, boolean can_login, boolean can_add_services, boolean can_add_schedules) {
@@ -20,6 +23,14 @@ public class Permission {
         this.can_login = can_login;
         this.can_add_services = can_add_services;
         this.can_add_schedules = can_add_schedules;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public void setCan_login(boolean can_login) {
@@ -32,10 +43,6 @@ public class Permission {
 
     public void setCan_add_schedules(boolean can_add_schedules) {
         this.can_add_schedules = can_add_schedules;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public User getUser() {

@@ -7,8 +7,10 @@ import javax.persistence.*;
 public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private long Id;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private float value; //TODO: nao usar primitivo
 
     public void setDescription(String description) {
@@ -24,11 +26,11 @@ public class Service {
         this.value = value;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         Id = id;
     }
 
-    public int getId() {
+    public long getId() {
         return Id;
     }
 
