@@ -1,5 +1,7 @@
 package com.prj.denilson.prjtrabalho.model;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,12 +10,17 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
-    private String password; //TODO: hash
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false, unique = true)
     private String phone; //TODO: não usar tipo primitivo
     private String name;
-    private UserType type; //TODO: ver como retornar Enum na API
+    @Column(updatable = false)
+    private UserType type;
+
+    //private UserStatus status; TODO: ver como tratar o delete do usuário
 
     public User(String email, String password, String phone, String name, UserType type) {
         this.email = email;
@@ -21,6 +28,10 @@ public class User {
         this.phone = phone;
         this.name = name;
         this.type = type;
+        hidePassword();
+    }
+
+    public User(){
     }
 
     public void setId(long id) {
@@ -33,6 +44,7 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+        hidePassword();
     }
 
     public void setPhone(String phone) {
@@ -45,9 +57,6 @@ public class User {
 
     public void setType(UserType type) {
         this.type = type;
-    }
-
-    public User() {
     }
 
     public long getId() {
@@ -78,4 +87,7 @@ public class User {
         //TODO: quando o usuário ser adicionado a uma empresa, ele recebe uma permissao
     }
 
+    public void hidePassword() {
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
+    }
 }

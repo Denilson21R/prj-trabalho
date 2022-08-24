@@ -1,6 +1,7 @@
 package com.prj.denilson.prjtrabalho.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "company")
@@ -15,6 +16,9 @@ public class Company {
     private String email;
     @Column(nullable = false)
     private String company_name;
+
+    @OneToMany
+    private List<User> employees;
 
     public Company() {
     }
