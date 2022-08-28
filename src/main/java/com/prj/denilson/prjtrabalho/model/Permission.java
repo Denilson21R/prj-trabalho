@@ -8,9 +8,9 @@ public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "id_user")
-    private final User user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name= "id_company")
@@ -25,6 +25,9 @@ public class Permission {
 
     @Column(nullable = false)
     private boolean company_owner;
+
+    public Permission() {
+    }
 
     public Permission(long id, User user, Company company, boolean can_login, boolean can_add_services, boolean can_add_schedules, boolean company_owner) {
         this.id = id;
