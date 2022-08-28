@@ -10,15 +10,16 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_creater")
     private User user_create;
+
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
     private String company_name;
 
-    @OneToMany
-    private List<User> employees;
+    @OneToMany(mappedBy = "company")
+    private List<Permission> permissionsUserCompany;
 
     public Company() {
     }

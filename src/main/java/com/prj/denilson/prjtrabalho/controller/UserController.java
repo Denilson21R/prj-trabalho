@@ -36,7 +36,7 @@ public class UserController {
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity Post(@RequestBody User pessoa)
     {
-        pessoa.hidePassword();
+        //pessoa.hidePassword();
         try {
             User user = userRepository.save(pessoa);
             return new ResponseEntity<User>(pessoa, HttpStatus.CREATED);
@@ -55,8 +55,12 @@ public class UserController {
             user.setPhone(newUser.getPhone());
             user.setEmail(newUser.getEmail());
             user.setPassword(newUser.getPassword());
-            userRepository.save(user);
-            return new ResponseEntity<User>(user, HttpStatus.OK);
+            try {
+                userRepository.save(user);
+                return new ResponseEntity<User>(user, HttpStatus.OK);
+            }catch (Exception e){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

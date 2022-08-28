@@ -1,8 +1,10 @@
 package com.prj.denilson.prjtrabalho.model;
 
+import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -16,22 +18,36 @@ public class User {
     private String password;
     @Column(nullable = false, unique = true)
     private String phone; //TODO: não usar tipo primitivo
+    @Column(nullable = false)
     private String name;
     @Column(updatable = false)
+    @Enumerated(EnumType.ORDINAL)
     private UserType type;
 
-    //private UserStatus status; TODO: ver como tratar o delete do usuário
+    @Enumerated(EnumType.ORDINAL)
+    private UserStatus status = UserStatus.ATIVO;
 
-    public User(String email, String password, String phone, String name, UserType type) {
+    @OneToMany(mappedBy = "user")
+    private List<Permission> permissionsUserCompany;
+
+    public User(long id, String email, String password, String phone, String name, UserStatus status) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.name = name;
-        this.type = type;
-        hidePassword();
+        this.status = status;
     }
 
     public User(){
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
     }
 
     public void setId(long id) {
@@ -81,10 +97,6 @@ public class User {
 
     public UserType getType() {
         return type;
-    }
-
-    void addToCompany(Company company){
-        //TODO: quando o usuário ser adicionado a uma empresa, ele recebe uma permissao
     }
 
     public void hidePassword() {
