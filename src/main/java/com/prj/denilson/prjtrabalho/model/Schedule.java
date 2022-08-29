@@ -11,34 +11,71 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private final LocalDateTime date;
+    private LocalDateTime date;
     @ManyToOne
     @JoinColumn(name = "employee_execute_id")
-    private final User employee_execute;
+    private User employee_execute;
     @ManyToOne
-    @JoinColumn(name = "employee_schedule_id")
-    private final User employee_schedule;
-    @OneToMany
-    private List<Service> service; //TODO: ver como usar listas aqui
+    @JoinColumn(name = "employee_schedule_id", nullable = false)
+    private User employee_schedule;
+    @ManyToMany
+    @JoinTable(
+            name = "service_schedule",
+            joinColumns = @JoinColumn(name = "schedule_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id"))
+    private List<Service> service;
     @ManyToOne
     @JoinColumn(name = "animal_id")
-    private final Animal animal;
+    private Animal animal;
     @Column(nullable = false)
-    private Status status; //TODO: ver como retornar Enum na API
+    private Status status;
     @Column(nullable = false)
     private boolean paid;
     @Column(nullable = false)
     private float amount; //TODO: nao usar tipo primitivo
 
-    public Schedule(LocalDateTime date, User employee_execute, User employee_schedule, List<Service> service, Animal animal, float amount, boolean paid) {
+    @ManyToOne
+    @JoinColumn(name = "id_company")
+    private Company company;
+
+    public Schedule(long id, LocalDateTime date, User employee_execute, User employee_schedule, List<Service> service, Animal animal, Status status, boolean paid, float amount, Company company) {
+        this.id = id;
         this.date = date;
         this.employee_execute = employee_execute;
         this.employee_schedule = employee_schedule;
         this.service = service;
         this.animal = animal;
-        this.amount = amount;
+        this.status = status;
         this.paid = paid;
-        this.status = Status.NOVO;
+        this.amount = amount;
+        this.company = company;
+    }
+
+    public Schedule() {
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    public void setEmployee_execute(User employee_execute) {
+        this.employee_execute = employee_execute;
+    }
+
+    public void setEmployee_schedule(User employee_schedule) {
+        this.employee_schedule = employee_schedule;
+    }
+
+    public void setAnimal(Animal animal) {
+        this.animal = animal;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public void setId(long id) {

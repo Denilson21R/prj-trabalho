@@ -56,9 +56,9 @@ public class PermissionController {
     @RequestMapping(value = "/permission/{id}", method = RequestMethod.DELETE)
     public ResponseEntity Delete(@PathVariable(value = "id") long id)
     {
-        Optional<Permission> pessoa = permissionRepository.findById(id);
-        if(pessoa.isPresent()){
-            permissionRepository.delete(pessoa.get());
+        Optional<Permission> permission = permissionRepository.findById(id);
+        if(permission.isPresent()){
+            permissionRepository.delete(permission.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

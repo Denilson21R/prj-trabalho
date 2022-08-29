@@ -18,7 +18,7 @@ public class AnimalController {
     @RequestMapping(value = "/user/{id}/animals", method = RequestMethod.GET)
     public ResponseEntity<List<Animal>> Get(@PathVariable(value = "id") long id)
     {
-        List<Animal> animals = animalRepository.findByAnimalsByUser(id);
+        List<Animal> animals = animalRepository.findAnimalsByUser(id);
         return new ResponseEntity<>(animals, HttpStatus.OK);
     }
 
@@ -62,9 +62,9 @@ public class AnimalController {
     @RequestMapping(value = "/animal/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Animal> Delete(@PathVariable(value = "id") long id)
     {
-        Optional<Animal> pessoa = animalRepository.findById(id);
-        if(pessoa.isPresent()){
-            animalRepository.delete(pessoa.get());
+        Optional<Animal> animal = animalRepository.findById(id);
+        if(animal.isPresent()){
+            animalRepository.delete(animal.get());
             return new ResponseEntity<>(HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

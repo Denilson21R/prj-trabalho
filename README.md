@@ -47,3 +47,35 @@
 
 16. DELETE ```/permission/{id}```
     - Deleta uma permissão e retorna 204 em caso de sucesso
+
+17. GET ```/company/{id}/services```
+    - Retorna todos os serviços de uma empresa
+
+18. GET ```/service/{id}```
+    - Retorna os dados de um serviço
+
+19. POST ```/service```
+    - Adiciona um serviço e retorna seus dados
+
+20. PUT ```/service/{id}```
+    - Atualiza um serviço e retorna seus dados
+
+21. DELETE ```/service/{id}```
+    - Deleta um serviço e retorna 204 em caso de sucesso
+
+22. GET ```/schedule```
+    - Retorna todos os agendamentos
+
+23. GET ```/schedule/{id}```
+    - Retorna os dados de um agendamento
+
+24. GET ```/company/{id}/schedule```
+    - Retorna todos os agendamentos de uma empresa
+
+25. POST ```/schedule```
+    - Adiciona um agendamento e retorna seus dados
+
+26. PUT ```/schedule/{id}```
+27. 
+
+28. DELETE ```/schedule/{id}```

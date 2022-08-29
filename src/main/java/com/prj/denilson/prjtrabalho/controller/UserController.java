@@ -36,7 +36,6 @@ public class UserController {
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity Post(@RequestBody User pessoa)
     {
-        //pessoa.hidePassword();
         try {
             User user = userRepository.save(pessoa);
             return new ResponseEntity<User>(pessoa, HttpStatus.CREATED);
@@ -65,6 +64,4 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 }

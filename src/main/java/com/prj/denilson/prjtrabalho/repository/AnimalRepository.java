@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
     @Query(value = "SELECT a FROM Animal a WHERE id_user = ?1")
-    List<Animal> findByAnimalsByUser(Long user);
+    List<Animal> findAnimalsByUser(Long user);
 }

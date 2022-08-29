@@ -13,17 +13,20 @@ public class Note {
     private String text;
     @ManyToOne
     @JoinColumn(name = "id_user")
-    private final User writer;
-    private final LocalDateTime date;
+    private User writer;
+    private LocalDateTime date;
     @ManyToOne
     @JoinColumn(name = "id_schedule")
-    private final Schedule schedule;
+    private Schedule schedule;
 
     public Note(String text, User writer, LocalDateTime date, Schedule schedule) {
         this.text = text;
         this.writer = writer;
         this.date = date;
         this.schedule = schedule;
+    }
+
+    public Note() {
     }
 
     public void setId(long id) {
