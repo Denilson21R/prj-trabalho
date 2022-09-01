@@ -8,13 +8,18 @@ public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "id_user", nullable = false, updatable = false)
     private User owner;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String specie;
+
     private String description;
 
     public Animal() {
@@ -33,6 +38,14 @@ public class Animal {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public void setSpecie(String specie) {
+        this.specie = specie;
     }
 
     public void setDescription(String description) {

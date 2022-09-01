@@ -13,7 +13,7 @@ public class Permission {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name= "id_company")
+    @JoinColumn(name= "id_company", nullable = false, updatable = false)
     private Company company;
 
     @Column(nullable = false)

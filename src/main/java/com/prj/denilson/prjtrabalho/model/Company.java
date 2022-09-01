@@ -9,20 +9,22 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
-    @JoinColumn(name = "id_creater")
+    @JoinColumn(name = "id_creater", nullable = false, updatable = false)
     private User user_create;
 
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
     private String company_name;
 
     private String cnpj; //TODO: não usar tipo primitivo
 
     @Enumerated(EnumType.ORDINAL)
+    @Column(nullable = false)
     private CompanyStatus status;
-
 
     public Company() {
     }

@@ -12,26 +12,14 @@ public class Service {
     @Column(nullable = false)
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "service")
-    private List<Schedule> schedules;
-
     @ManyToOne
-    @JoinColumn(name = "id_company")
+    @JoinColumn(name = "id_company", nullable = false, updatable = false)
     private Company company;
-
 
     @Column(nullable = false)
     private float value; //TODO: nao usar primitivo
 
     public Service() {
-    }
-
-    public List<Schedule> getSchedules() {
-        return schedules;
-    }
-
-    public void setSchedules(List<Schedule> schedules) {
-        this.schedules = schedules;
     }
 
     public void setDescription(String description) {

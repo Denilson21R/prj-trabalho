@@ -20,7 +20,7 @@ public class User {
     private String phone; //TODO: não usar tipo primitivo
     @Column(nullable = false)
     private String name;
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private UserType type;
 
@@ -30,8 +30,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Permission> permissionsUserCompany;
 
-    public User(long id, String email, String password, String phone, String name, UserStatus status) {
-        this.id = id;
+    public User(String email, String password, String phone, String name, UserStatus status) {
         this.email = email;
         this.password = password;
         this.phone = phone;

@@ -76,6 +76,22 @@
     - Adiciona um agendamento e retorna seus dados
 
 26. PUT ```/schedule/{id}```
-27. 
+    - Atualiza um agendamento e retorna seus dados
 
-28. DELETE ```/schedule/{id}```
+27. DELETE ```/schedule/{id}```
+    - Deleta uma nota e retorna 204 em caso de sucesso
+
+28. GET ```/schedule/{id}/annotation```
+    - Retorna todas as notas de um agendamento
+
+29. GET ```/annotation/{id}```
+    - Retorna os dados de uma nota
+
+30. POST ```/annotation```
+    - Adiciona uma nota e retorna seus dados
+
+31. PUT ```/annotation/{id}```
+    - Atualiza uma nota e retorna seus dados
+
+32. DELETE ```/annotation/{id}```
+    - Deleta uma nota e retorna 204 em caso de sucesso

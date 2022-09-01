@@ -11,18 +11,30 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(nullable = false)
     private LocalDateTime date;
+
     @ManyToOne
     @JoinColumn(name = "employee_execute_id")
     private User employee_execute;
+
     @ManyToOne
-    @JoinColumn(name = "employee_schedule_id", nullable = false)
+    @JoinColumn(name = "employee_schedule_id", nullable = false, updatable = false)
     private User employee_schedule;
+
     @ManyToMany
     @JoinTable(
             name = "service_schedule",
-            joinColumns = @JoinColumn(name = "schedule_id"),
-            inverseJoinColumns = @JoinColumn(name = "service_id"))
+            joinColumns = @JoinColumn(
+                    name = "schedule_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "service_id",
+                    referencedColumnName = "id"
+            )
+    )
     private List<Service> service;
     @ManyToOne
     @JoinColumn(name = "animal_id")
@@ -35,7 +47,7 @@ public class Schedule {
     private float amount; //TODO: nao usar tipo primitivo
 
     @ManyToOne
-    @JoinColumn(name = "id_company")
+    @JoinColumn(name = "id_company", nullable = false)
     private Company company;
 
     public Schedule(long id, LocalDateTime date, User employee_execute, User employee_schedule, List<Service> service, Animal animal, Status status, boolean paid, float amount, Company company) {

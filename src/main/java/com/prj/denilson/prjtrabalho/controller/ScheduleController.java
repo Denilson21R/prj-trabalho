@@ -1,9 +1,6 @@
 package com.prj.denilson.prjtrabalho.controller;
 
-import com.prj.denilson.prjtrabalho.model.Animal;
 import com.prj.denilson.prjtrabalho.model.Schedule;
-import com.prj.denilson.prjtrabalho.model.Service;
-import com.prj.denilson.prjtrabalho.model.User;
 import com.prj.denilson.prjtrabalho.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +44,7 @@ public class ScheduleController {
     public ResponseEntity Post(@RequestBody Schedule schedule)
     {
         try {
-            Schedule Schedule = scheduleRepository.save(schedule);
+            scheduleRepository.save(schedule);
             return new ResponseEntity<Schedule>(schedule, HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
