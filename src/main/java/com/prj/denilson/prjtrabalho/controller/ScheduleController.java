@@ -20,8 +20,6 @@ public class ScheduleController {
         return scheduleRepository.findAll();
     }
 
-    //TODO: gets pararam de funcionar após o many to many
-
     @RequestMapping(value = "/schedule/{id}", method = RequestMethod.GET)
     public ResponseEntity<Schedule> GetById(@PathVariable(value = "id") long id)
     {
