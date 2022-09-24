@@ -15,6 +15,7 @@ public class AnimalController {
     @Autowired
     private AnimalRepository animalRepository;
 
+    @CrossOrigin("http://localhost:4200")
     @RequestMapping(value = "/user/{id}/animals", method = RequestMethod.GET)
     public ResponseEntity<List<Animal>> Get(@PathVariable(value = "id") long id)
     {

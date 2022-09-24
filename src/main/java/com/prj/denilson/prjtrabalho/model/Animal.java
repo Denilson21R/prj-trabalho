@@ -9,7 +9,6 @@ public class Animal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false, updatable = false)
     private User owner;

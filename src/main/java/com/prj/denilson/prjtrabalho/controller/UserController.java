@@ -1,10 +1,7 @@
 package com.prj.denilson.prjtrabalho.controller;
 
-import com.prj.denilson.prjtrabalho.model.Animal;
 import com.prj.denilson.prjtrabalho.model.User;
-import com.prj.denilson.prjtrabalho.model.UserStatus;
 import com.prj.denilson.prjtrabalho.model.UserType;
-import com.prj.denilson.prjtrabalho.repository.AnimalRepository;
 import com.prj.denilson.prjtrabalho.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,18 +16,6 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
-
-    @CrossOrigin("http://localhost:4200")
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public ResponseEntity<User> GetById(@PathVariable(value = "id") long id)
-    {
-        Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()) {
-            return new ResponseEntity<User>(user.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
     @CrossOrigin("http://localhost:4200")
     @RequestMapping(value = "/user/authenticate", method = RequestMethod.POST)
@@ -46,6 +30,18 @@ public class UserController {
             }
         }catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @CrossOrigin("http://localhost:4200")
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
+    public ResponseEntity<User> GetById(@PathVariable(value = "id") long id)
+    {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()) {
+            return new ResponseEntity<User>(user.get(), HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

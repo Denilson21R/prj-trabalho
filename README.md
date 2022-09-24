@@ -1,94 +1,97 @@
 ### ENDPOINTS
 
-1. GET ```/user/{id}```
-   - Retorna os dados de um usuário
+1. POST ```/user/authenticate```
+   - Verifica e-mail e senha de um usuário e retorna seus dados completos se estiverem corretos
 
 2. POST ```/user```
    - Adiciona um novo usuário e retorna seus dados
 
-3. PUT ```/user/{id}```
+3. GET ```/user/{id}```
+    - Retorna os dados de um usuário
+
+4. PATCH ```/user/{id}```
    - Atualiza um usuário e retorna os dados novos
 
-4. GET ```/user/{id}/animals```
-   - Retorna os animais de um usuário
+5. GET ```/user/{id}/animals```
+   - Retorna uma lista com os animais de um usuário
 
-5. GET ```/animal/{id}```
+6. GET ```/animal/{id}```
    - Retorna os dados de um animal
 
-6. POST ```/animal```
+7. POST ```/animal```
    - Adiciona um novo animal e retorna seus dados
 
-7. PUT ```/animal/{id}```
+8. PUT ```/animal/{id}```
    - Atualiza um animal e retorna os dados novos
 
-8. DELETE ```/animal/{id}```
+9. DELETE ```/animal/{id}```
    - Deleta um animal e retorna 204 em caso de sucesso
 
-9. GET ```/company/{id}```
-   - Retorna os dados de uma empresa
+10. GET ```/company/{id}```
+    - Retorna os dados de uma empresa
 
-10. POST ```/company```
+11. POST ```/company```
     - Adiciona uma empresa e retorna seus dados
     
-11. PUT ```/company/{id}```
+12. PUT ```/company/{id}```
     - Atualiza uma empresa e retorna seus dados
 
-12. GET ```/permission/{id}```
+13. GET ```/permission/{id}```
     - Retorna os dados de uma permissão
 
-13. POST ```/permission/```
+14. POST ```/permission/```
     - Adiciona uma permissão e retorna seus dados
 
-14. PUT ```/permission/{id}```
+15. PUT ```/permission/{id}```
     - Atualiza uma permissão e retorna seus dados
 
-15. DELETE ```/permission/{id}```
+16. DELETE ```/permission/{id}```
     - Deleta uma permissão e retorna 204 em caso de sucesso
 
-16. GET ```/company/{id}/services```
+17. GET ```/company/{id}/services```
     - Retorna todos os serviços de uma empresa
 
-17. GET ```/service/{id}```
+18. GET ```/service/{id}```
     - Retorna os dados de um serviço
 
-18. POST ```/service```
+19. POST ```/service```
     - Adiciona um serviço e retorna seus dados
 
-19. PUT ```/service/{id}```
+20. PUT ```/service/{id}```
     - Atualiza um serviço e retorna seus dados
 
-20. DELETE ```/service/{id}```
+21. DELETE ```/service/{id}```
     - Deleta um serviço e retorna 204 em caso de sucesso
 
-21. GET ```/schedule```
+22. GET ```/schedule```
     - Retorna todos os agendamentos
 
-22. GET ```/schedule/{id}```
+23. GET ```/schedule/{id}```
     - Retorna os dados de um agendamento
 
-23. GET ```/company/{id}/schedule```
+24. GET ```/company/{id}/schedule```
     - Retorna todos os agendamentos de uma empresa
 
-24. POST ```/schedule```
+25. POST ```/schedule```
     - Adiciona um agendamento e retorna seus dados
 
-25. PUT ```/schedule/{id}```
+26. PUT ```/schedule/{id}```
     - Atualiza um agendamento e retorna seus dados
 
-26. DELETE ```/schedule/{id}```
+27. DELETE ```/schedule/{id}```
     - Deleta uma nota e retorna 204 em caso de sucesso
 
-27. GET ```/schedule/{id}/annotation```
+28. GET ```/schedule/{id}/annotation```
     - Retorna todas as notas de um agendamento
 
-28. GET ```/annotation/{id}```
+29. GET ```/annotation/{id}```
     - Retorna os dados de uma nota
 
-29. POST ```/annotation```
+30. POST ```/annotation```
     - Adiciona uma nota e retorna seus dados
 
-30. PUT ```/annotation/{id}```
+31. PUT ```/annotation/{id}```
     - Atualiza uma nota e retorna seus dados
 
-31. DELETE ```/annotation/{id}```
+32. DELETE ```/annotation/{id}```
     - Deleta uma nota e retorna 204 em caso de sucesso
