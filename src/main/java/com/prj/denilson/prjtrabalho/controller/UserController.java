@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import java.util.Optional;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @CrossOrigin("http://localhost:4200")
     @RequestMapping(value = "/user/authenticate", method = RequestMethod.POST)
     public ResponseEntity PostAuthenticate(@RequestParam Map<String, String> pessoa)
     {
@@ -33,7 +33,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin("http://localhost:4200")
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> GetById(@PathVariable(value = "id") long id)
     {
@@ -45,7 +44,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin("http://localhost:4200")
     @RequestMapping(value = "/user", method = RequestMethod.POST)
     public ResponseEntity Post(@RequestParam Map<String, String> pessoa)
     {
@@ -54,6 +52,7 @@ public class UserController {
         user.setPassword(pessoa.get("password"));
         user.setEmail(pessoa.get("email"));
         user.setPhone(pessoa.get("phone"));
+        user.setPathImage("assets/images/usuario-padrao.png"); //TODO: esconder essa string em uma constante
         user.setType(UserType.values()[Integer.parseInt(pessoa.get("type"))]);
         try {
             User newUser = userRepository.save(user);
@@ -63,17 +62,15 @@ public class UserController {
         }
     }
 
-    @CrossOrigin("http://localhost:4200")
-    @RequestMapping(value = "/user/{id}", method =  RequestMethod.PATCH)
-    public ResponseEntity<User> Put(@PathVariable(value = "id") long id, @RequestBody User newUser)
+    @RequestMapping(value = "/user/{id}", method =  RequestMethod.PUT)
+    public ResponseEntity<User> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newUser)
     {
         Optional<User> oldUser = userRepository.findById(id);
         if(oldUser.isPresent()){
             User user = oldUser.get();
-            user.setName(newUser.getName());
-            user.setPhone(newUser.getPhone());
-            user.setEmail(newUser.getEmail());
-            user.setPassword(newUser.getPassword());
+            user.setName(newUser.get("name"));
+            user.setPhone(newUser.get("phone"));
+            user.setEmail(newUser.get("email"));
             try {
                 userRepository.save(user);
                 return new ResponseEntity<User>(user, HttpStatus.OK);

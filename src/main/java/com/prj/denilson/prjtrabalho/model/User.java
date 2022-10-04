@@ -27,16 +27,8 @@ public class User {
     @Enumerated(EnumType.ORDINAL)
     private UserStatus status = UserStatus.ATIVO;
 
-    @OneToMany(mappedBy = "user")
-    private List<Permission> permissionsUserCompany;
-
-    public User(String email, String password, String phone, String name, UserStatus status) {
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.name = name;
-        this.status = status;
-    }
+    @Column
+    private String pathImage;
 
     public User(){
     }
@@ -96,6 +88,14 @@ public class User {
 
     public UserType getType() {
         return type;
+    }
+
+    public String getPathImage() {
+        return pathImage;
+    }
+
+    public void setPathImage(String pathImage) {
+        this.pathImage = pathImage;
     }
 
     public void hidePassword() {

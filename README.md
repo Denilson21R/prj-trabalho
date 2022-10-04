@@ -9,7 +9,7 @@
 3. GET ```/user/{id}```
     - Retorna os dados de um usuário
 
-4. PATCH ```/user/{id}```
+4. PUT ```/user/{id}```
    - Atualiza um usuário e retorna os dados novos
 
 5. GET ```/user/{id}/animals```
