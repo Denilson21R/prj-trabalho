@@ -40,7 +40,7 @@ public class Schedule {
     @JoinColumn(name = "animal_id")
     private Animal animal;
     @Column(nullable = false)
-    private Status status;
+    private ScheduleStatus scheduleStatus;
     @Column(nullable = false)
     private boolean paid;
     @Column(nullable = false)
@@ -50,14 +50,14 @@ public class Schedule {
     @JoinColumn(name = "id_company", nullable = false)
     private Company company;
 
-    public Schedule(long id, LocalDateTime date, User employee_execute, User employee_schedule, List<Service> service, Animal animal, Status status, boolean paid, float amount, Company company) {
+    public Schedule(long id, LocalDateTime date, User employee_execute, User employee_schedule, List<Service> service, Animal animal, ScheduleStatus scheduleStatus, boolean paid, float amount, Company company) {
         this.id = id;
         this.date = date;
         this.employee_execute = employee_execute;
         this.employee_schedule = employee_schedule;
         this.service = service;
         this.animal = animal;
-        this.status = status;
+        this.scheduleStatus = scheduleStatus;
         this.paid = paid;
         this.amount = amount;
         this.company = company;
@@ -94,8 +94,8 @@ public class Schedule {
         this.id = id;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setStatus(ScheduleStatus scheduleStatus) {
+        this.scheduleStatus = scheduleStatus;
     }
 
     public void setService(List<Service> service) {
@@ -126,8 +126,8 @@ public class Schedule {
         return animal;
     }
 
-    public Status getStatus() {
-        return status;
+    public ScheduleStatus getStatus() {
+        return scheduleStatus;
     }
 
     public boolean isPaid() {

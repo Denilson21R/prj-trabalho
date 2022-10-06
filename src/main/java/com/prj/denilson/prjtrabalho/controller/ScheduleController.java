@@ -10,14 +10,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 public class ScheduleController {
     @Autowired
     ScheduleRepository scheduleRepository;
 
-    @RequestMapping(value = "/schedule", method = RequestMethod.GET)
-    public List<Schedule> Get() {
-        return scheduleRepository.findAll();
+    @RequestMapping(value = "/schedules/client/{id}", method = RequestMethod.GET)
+    public ResponseEntity<List<Schedule>> GetByClientId(@PathVariable(value = "id") long id)
+    {
+        List<Schedule> schedules = scheduleRepository.findSchedulesByAnimalOwner(id);
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/schedule/{id}", method = RequestMethod.GET)
@@ -31,7 +34,7 @@ public class ScheduleController {
         }
     }
 
-    @RequestMapping(value = "/company/{id}/schedule", method = RequestMethod.GET)
+    @RequestMapping(value = "/company/{id}/schedules", method = RequestMethod.GET)
     public ResponseEntity<List<Schedule>> GetSchedulesByCompany(@PathVariable(value = "id") long id)
     {
         List<Schedule> schedules = scheduleRepository.findSchedulesByCompany(id);

@@ -1,6 +1,6 @@
 package com.prj.denilson.prjtrabalho.model;
 
-public enum Status {
+public enum ScheduleStatus {
     NOVO,
     EXECUTANDO,
     FINALIZADO,

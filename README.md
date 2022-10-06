@@ -63,13 +63,10 @@
 21. DELETE ```/service/{id}```
     - Deleta um serviço e retorna 204 em caso de sucesso
 
-22. GET ```/schedule```
-    - Retorna todos os agendamentos
-
 23. GET ```/schedule/{id}```
     - Retorna os dados de um agendamento
 
-24. GET ```/company/{id}/schedule```
+24. GET ```/company/{id}/schedules```
     - Retorna todos os agendamentos de uma empresa
 
 25. POST ```/schedule```
