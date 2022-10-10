@@ -1,6 +1,7 @@
 package com.prj.denilson.prjtrabalho.model;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -39,6 +40,12 @@ public class ServiceRequest {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ServiceRequestStatus status;
+
+    @Column(nullable = false)
+    private LocalDateTime createdDate;
+
+    @Column(nullable = false)
+    private LocalDateTime serviceDate;
 
     public ServiceRequest() {
     }
