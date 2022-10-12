@@ -44,7 +44,6 @@ public class PermissionController {
         Optional<Permission> oldPermission = permissionRepository.findById(id);
         if(oldPermission.isPresent()){
             Permission permission = oldPermission.get();
-            permission.setCan_login(newPermission.isCan_login());
             permission.setCompany_owner(newPermission.isCompany_owner());
             permission.setCan_add_schedules(newPermission.isCan_add_schedules());
             permission.setCan_add_services(newPermission.isCan_add_services());

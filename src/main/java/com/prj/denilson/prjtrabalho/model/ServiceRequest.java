@@ -17,7 +17,7 @@ public class ServiceRequest {
 
     @ManyToMany
     @JoinTable(
-            name = "service_request_schedule",
+            name = "service_request_services",
             joinColumns = @JoinColumn(
                     name = "schedule_id",
                     referencedColumnName = "id"
@@ -78,6 +78,22 @@ public class ServiceRequest {
         return animal;
     }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getServiceDate() {
+        return serviceDate;
+    }
+
+    public void setServiceDate(LocalDateTime serviceDate) {
+        this.serviceDate = serviceDate;
+    }
+
     public void setAnimal(Animal animal) {
         this.animal = animal;
     }
@@ -96,5 +112,19 @@ public class ServiceRequest {
 
     public void setStatus(ServiceRequestStatus status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "ServiceRequest{" +
+                "id=" + id +
+                ", client=" + client +
+                ", requested_services=" + requested_services +
+                ", animal=" + animal +
+                ", company=" + company +
+                ", status=" + status +
+                ", createdDate=" + createdDate +
+                ", serviceDate=" + serviceDate +
+                '}';
     }
 }

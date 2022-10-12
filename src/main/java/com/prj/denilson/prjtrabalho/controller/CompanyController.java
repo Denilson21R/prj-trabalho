@@ -1,14 +1,17 @@
 package com.prj.denilson.prjtrabalho.controller;
 
 import com.prj.denilson.prjtrabalho.model.Company;
+import com.prj.denilson.prjtrabalho.model.User;
 import com.prj.denilson.prjtrabalho.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("http://localhost:4200")
 @RestController
 public class CompanyController {
 
@@ -50,6 +53,16 @@ public class CompanyController {
             return new ResponseEntity<>(company, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/company/{id}/users", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> GetCompanyUsersByCompanyId(@PathVariable(value = "id") long id) {
+        List<User> users = companyRepository.findCompanyUsersByCompanyId(id);
+        if (!users.isEmpty()) {
+            return new ResponseEntity<>(users, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 }

@@ -17,8 +17,6 @@ public class Permission {
     private Company company;
 
     @Column(nullable = false)
-    private boolean can_login;
-    @Column(nullable = false)
     private boolean can_add_services;
     @Column(nullable = false)
     private boolean can_add_schedules;
@@ -33,7 +31,6 @@ public class Permission {
         this.id = id;
         this.user = user;
         this.company = company;
-        this.can_login = can_login;
         this.can_add_services = can_add_services;
         this.can_add_schedules = can_add_schedules;
         this.company_owner = company_owner;
@@ -55,10 +52,6 @@ public class Permission {
         return id;
     }
 
-    public void setCan_login(boolean can_login) {
-        this.can_login = can_login;
-    }
-
     public void setCan_add_services(boolean can_add_services) {
         this.can_add_services = can_add_services;
     }
@@ -69,10 +62,6 @@ public class Permission {
 
     public User getUser() {
         return user;
-    }
-
-    public boolean isCan_login() {
-        return can_login;
     }
 
     public boolean isCan_add_services() {
