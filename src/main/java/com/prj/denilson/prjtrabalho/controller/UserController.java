@@ -22,7 +22,7 @@ public class UserController {
     public ResponseEntity PostAuthenticate(@RequestParam Map<String, String> pessoa)
     {
         try {
-            User userAuthenticate = userRepository.authenticateUser(pessoa.get("email"));
+            User userAuthenticate = userRepository.getUserByEmail(pessoa.get("email"));
             if(BCrypt.checkpw(pessoa.get("password"), userAuthenticate.getPassword())){
                 return new ResponseEntity<User>(userAuthenticate, HttpStatus.OK);
             }else{

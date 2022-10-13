@@ -2,6 +2,7 @@ package com.prj.denilson.prjtrabalho.controller;
 
 import com.prj.denilson.prjtrabalho.model.*;
 import com.prj.denilson.prjtrabalho.repository.CompanyInviteRepository;
+import com.prj.denilson.prjtrabalho.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,24 +17,30 @@ import java.util.Optional;
 public class CompanyInviteController {
     @Autowired
     CompanyInviteRepository companyInviteRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @RequestMapping(value = "/invite", method = RequestMethod.POST)
     public ResponseEntity<CompanyInvite> addInvite(@RequestParam Map<String, String> invite)
     {
-        CompanyInvite companyInvite = new CompanyInvite();
-        Company company = new Company();
-        company.setId(Integer.parseInt(invite.get("company")));
-        companyInvite.setCompany(company);
-        User employee = new User();
-        employee.setId(Integer.parseInt(invite.get("user")));
-        companyInvite.setEmployee(employee);
-        companyInvite.setStatus(CompanyInviteStatus.ABERTO);
-        try {
-            CompanyInvite companyInviteSaved = companyInviteRepository.save(companyInvite);
-            return new ResponseEntity<>(companyInviteSaved, HttpStatus.CREATED);
-        }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        User userAuthenticate = userRepository.getUserByEmail(invite.get("email"));
+        if(userAuthenticate != null){
+            CompanyInvite companyInvite = new CompanyInvite();
+            Company company = new Company();
+            company.setId(Integer.parseInt(invite.get("company")));
+            companyInvite.setCompany(company);
+            User employee = new User();
+            employee.setId(userAuthenticate.getId());
+            companyInvite.setEmployee(employee);
+            companyInvite.setStatus(CompanyInviteStatus.ABERTO);
+            try {
+                CompanyInvite companyInviteSaved = companyInviteRepository.save(companyInvite);
+                return new ResponseEntity<>(companyInviteSaved, HttpStatus.CREATED);
+            }catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/invite/{id}", method =  RequestMethod.PUT)
