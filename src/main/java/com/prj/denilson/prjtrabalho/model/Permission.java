@@ -64,6 +64,10 @@ public class Permission {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public boolean isCan_add_services() {
         return can_add_services;
     }

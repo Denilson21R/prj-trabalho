@@ -43,8 +43,8 @@ public class CompanyInviteController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value = "/invite/{id}", method =  RequestMethod.PUT)
-    public ResponseEntity<CompanyInvite> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newInvite)
+    @RequestMapping(value = "/invite/{id}", method =  RequestMethod.PATCH)
+    public ResponseEntity<CompanyInvite> Patch(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newInvite)
     {
         Optional<CompanyInvite> oldInvite = companyInviteRepository.findById(id);
         if(oldInvite.isPresent()){
@@ -52,7 +52,7 @@ public class CompanyInviteController {
             newCompanyInvite.setStatus(CompanyInviteStatus.values()[Integer.parseInt(newInvite.get("status"))]);
             try {
                 companyInviteRepository.save(newCompanyInvite);
-                return new ResponseEntity<CompanyInvite>(newCompanyInvite, HttpStatus.OK);
+                return new ResponseEntity<>(newCompanyInvite, HttpStatus.OK);
             }catch (Exception e){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -75,7 +75,7 @@ public class CompanyInviteController {
     @RequestMapping(value = "/invites/company/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<CompanyInvite>> GetByCompanyId(@PathVariable(value = "id") long id)
     {
-        List<CompanyInvite> invites = companyInviteRepository.findInviterByCompanyId(id);
+        List<CompanyInvite> invites = companyInviteRepository.findInvitesByCompanyId(id);
         if(!invites.isEmpty()) {
             return new ResponseEntity<>(invites, HttpStatus.OK);
         }else {
