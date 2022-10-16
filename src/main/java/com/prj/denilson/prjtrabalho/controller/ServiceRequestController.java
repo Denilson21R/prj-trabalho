@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @CrossOrigin("http://localhost:4200")
 @RestController
-public class ServiceRequestController { //TODO: test enpoints
+public class ServiceRequestController {
     @Autowired
     ServiceRequestRepository serviceRequestRepository;
 
@@ -36,14 +38,37 @@ public class ServiceRequestController { //TODO: test enpoints
         User user = new User();
         user.setId(Integer.parseInt(invite.get("user")));
         serviceRequest.setClient(user);
-        //TODO: update service date according to string sended by frontend
-        serviceRequest.setServiceDate(LocalDateTime.now());
+        //servicedatetime
+        String[] dateTime = invite.get("date").split("T"); //arrays date e time
+        LocalDate date = getDateByString(dateTime);
+        LocalTime time = getTimeByString(dateTime);
+        LocalDateTime dateService = LocalDateTime.of(date, time);
+        serviceRequest.setServiceDate(dateService);
+        //requestdatetime
+        serviceRequest.setCreatedDate(LocalDateTime.now());
         try {
             ServiceRequest newServiceRequest = serviceRequestRepository.save(serviceRequest);
             return new ResponseEntity<>(newServiceRequest, HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    private static LocalTime getTimeByString(String[] dateTime) {
+        String time = dateTime[1].substring(0, 2) + ":" +dateTime[1].substring(3);
+        return LocalTime.of(
+                Integer.parseInt(dateTime[1].substring(0, 2)), //horas
+                Integer.parseInt(dateTime[1].substring(3)) //minutos
+        );
+    }
+
+    private static LocalDate getDateByString(String[] dateTime) {
+        String date = dateTime[0].substring(0, 4) + "/" + dateTime[0].substring(5, 7) + "/" + dateTime[0].substring(8);
+        return LocalDate.of(
+                Integer.parseInt(dateTime[0].substring(0, 4)), //ano
+                Integer.parseInt(dateTime[0].substring(5, 7)), //mes
+                Integer.parseInt(dateTime[0].substring(8)) //dia
+        );
     }
 
     @RequestMapping(value = "/service-request/{id}", method =  RequestMethod.PUT)
@@ -72,20 +97,20 @@ public class ServiceRequestController { //TODO: test enpoints
     }
 
     @RequestMapping(value = "/service-request/{id}/services", method =  RequestMethod.PATCH)
-    public ResponseEntity<ServiceRequest> Patch(@PathVariable(value = "id") long id, @RequestParam List<String> services)
+    public ResponseEntity<ServiceRequest> Patch(@PathVariable(value = "id") long id, @RequestParam Map<String, String> services)
     {
-        System.out.println(services.toString());
         Optional<ServiceRequest> oldRequest = serviceRequestRepository.findById(id);
         if(oldRequest.isPresent()){
+            List<Service> newServices = new ArrayList<>();
             ServiceRequest newServiceRequest = oldRequest.get();
-            List<Service> newServices = new ArrayList<Service>();
-            for (String newServiceId: services) {
+            String servicesString = services.get("services");
+            String[] servicesList = servicesString.split(", ");
+            for (String newServiceId: servicesList) {
                 Service newServiceObject = new Service();
                 newServiceObject.setId(Long.parseLong(newServiceId));
                 newServices.add(newServiceObject);
             }
             newServiceRequest.setRequested_services(newServices);
-            System.out.println(newServiceRequest.toString());
             try {
                 ServiceRequest serviceSaved = serviceRequestRepository.save(newServiceRequest);
                 return new ResponseEntity<>(serviceSaved, HttpStatus.OK);

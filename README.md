@@ -3,11 +3,11 @@
 1. POST ```/user/authenticate```
    - Verifica e-mail e senha de um usuário e retorna seus dados completos se estiverem corretos
 
-2. POST ```/user```
-   - Adiciona um novo usuário e retorna seus dados
-
-3. GET ```/user/{id}```
+2. GET ```/user/{id}```
     - Retorna os dados de um usuário
+
+3. POST ```/user```
+   - Adiciona um novo usuário e retorna seus dados
 
 4. PUT ```/user/{id}```
    - Atualiza um usuário e retorna os dados novos
@@ -27,68 +27,104 @@
 9. DELETE ```/animal/{id}```
    - Deleta um animal e retorna 204 em caso de sucesso
 
-10. GET ```/company/{id}```
+10. POST ```/company```
+    - Adiciona uma empresa e retorna seus dados
+
+11. GET ```/company/{id}```
     - Retorna os dados de uma empresa
 
-11. POST ```/company```
-    - Adiciona uma empresa e retorna seus dados
+12. GET ```/companies```
+    - Retorna uma lista com todas as empresas ativas
     
-12. PUT ```/company/{id}```
+13. PUT ```/company/{id}```
     - Atualiza uma empresa e retorna seus dados
 
-13. GET ```/permission/{id}```
-    - Retorna os dados de uma permissão
+14. GET ```/company/{id}/users```
+    - Retorna todos os usuarios de uma empresa
 
-14. POST ```/permission/```
+15. POST ```/permission/```
     - Adiciona uma permissão e retorna seus dados
 
-15. PUT ```/permission/{id}```
+16. GET ```/permission/{id}```
+    - Retorna os dados de uma permissão
+
+17. PATCH ```/permission/{id}```
     - Atualiza uma permissão e retorna seus dados
 
-16. DELETE ```/permission/{id}```
+18. DELETE ```/permission/{id}```
     - Deleta uma permissão e retorna 204 em caso de sucesso
 
-17. GET ```/company/{id}/services```
+19. GET ```/company/{id}/services```
     - Retorna todos os serviços de uma empresa
 
-18. GET ```/service/{id}```
-    - Retorna os dados de um serviço
-
-19. POST ```/service```
+20. POST ```/service```
     - Adiciona um serviço e retorna seus dados
 
-20. PUT ```/service/{id}```
+21. GET ```/service/{id}```
+    - Retorna os dados de um serviço
+
+22. PUT ```/service/{id}```
     - Atualiza um serviço e retorna seus dados
 
-21. DELETE ```/service/{id}```
+23. DELETE ```/service/{id}```
     - Deleta um serviço e retorna 204 em caso de sucesso
 
-23. GET ```/schedule/{id}```
+24. GET ```/schedules/client/{id}```
     - Retorna os dados de um agendamento
 
-24. GET ```/company/{id}/schedules```
+25. GET ```/schedule/{id}```
+    - Retorna os dados de um agendamento
+
+26. GET ```/company/{id}/schedules```
     - Retorna todos os agendamentos de uma empresa
 
-25. POST ```/schedule```
+27. POST ```/schedule```
     - Adiciona um agendamento e retorna seus dados
 
-26. PUT ```/schedule/{id}```
+28. PUT ```/schedule/{id}```
     - Atualiza um agendamento e retorna seus dados
 
-27. DELETE ```/schedule/{id}```
+29. DELETE ```/schedule/{id}```
     - Deleta uma nota e retorna 204 em caso de sucesso
 
-28. GET ```/schedule/{id}/annotation```
+30. GET ```/schedule/{id}/annotation```
     - Retorna todas as notas de um agendamento
 
-29. GET ```/annotation/{id}```
+31. GET ```/annotation/{id}```
     - Retorna os dados de uma nota
 
-30. POST ```/annotation```
+32. POST ```/annotation```
     - Adiciona uma nota e retorna seus dados
 
-31. PUT ```/annotation/{id}```
+33. PUT ```/annotation/{id}```
     - Atualiza uma nota e retorna seus dados
 
-32. DELETE ```/annotation/{id}```
+34. DELETE ```/annotation/{id}```
     - Deleta uma nota e retorna 204 em caso de sucesso
+
+35. POST ```/service-request```
+    - Adiciona uma requisição de serviço e retorna seus dados
+
+36. PUT ```/service-request/{id}```
+    - Atualiza uma requisição de serviço e retorna seus dados
+
+37. PATCH ```/service-request/{id}/services```
+    - Atualiza uma lista com os serviços de uma requisição de serviço e retorna a requisição completa
+
+38. GET ```/requests/company/{id}```
+    - Retorna as requisições de serviço de uma empresa
+
+39. GET ```/requests/user/{id}```
+    - Retorna as requisições de serviço de um usuário
+
+40. POST ```/invite```
+    - Adiciona um convite para empresa e retorna seus dados
+
+41. PATCH ```/invite/{id}```
+    - Atualiza o status de um convite para empresa
+
+42. GET ```/invites/user/{id}```
+    - Retorna os convites para empresa de um usuário
+
+43. GET ```/invites/company/{id}```
+    - Retorna os convites para empresa de uma empresa

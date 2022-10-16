@@ -40,6 +40,17 @@ public class CompanyController {
         }
     }
 
+    @RequestMapping(value = "/companies", method = RequestMethod.GET)
+    public ResponseEntity<List<Company>> GetAllCompanies()
+    {
+        List<Company> companies = companyRepository.getAllActiveCompanies();
+        if(!companies.isEmpty()) {
+            return new ResponseEntity<List<Company>>(companies, HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     @RequestMapping(value = "/company/{id}", method =  RequestMethod.PUT)
     public ResponseEntity<Company> Put(@PathVariable(value = "id") long id, @RequestBody Company newCompany)
     {

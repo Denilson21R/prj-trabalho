@@ -17,4 +17,7 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
                     "JOIN Company c ON c.id = p.company.id " +
                     "WHERE c.id = ?1")
     List<User> findCompanyUsersByCompanyId(long id);
+
+    @Query(value = "SELECT c FROM Company c WHERE c.status = 0")
+    List<Company> getAllActiveCompanies();
 }
