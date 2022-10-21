@@ -19,16 +19,22 @@ public class Animal {
     @Column(nullable = false)
     private String specie;
 
+    @Column(nullable = false)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
 
     public Animal() {
     }
 
-    public Animal(User owner, String name, String specie, String description) {
-        this.owner = owner;
-        this.name = name;
-        this.specie = specie;
-        this.description = description;
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public void setId(long id) {

@@ -1,6 +1,7 @@
 package com.prj.denilson.prjtrabalho.controller;
 
 import com.prj.denilson.prjtrabalho.model.Company;
+import com.prj.denilson.prjtrabalho.model.CompanyStatus;
 import com.prj.denilson.prjtrabalho.model.User;
 import com.prj.denilson.prjtrabalho.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin("http://localhost:4200")
@@ -19,11 +21,19 @@ public class CompanyController {
     private CompanyRepository companyRepository;
 
     @RequestMapping(value = "/company", method = RequestMethod.POST)
-    public ResponseEntity Post(@RequestBody Company company)
+    public ResponseEntity<Company> Post(@RequestParam Map<String, String> company)
     {
+        Company newCompany = new Company();
+        newCompany.setStatus(CompanyStatus.ATIVO);
+        newCompany.setCompany_name(company.get("name"));
+        newCompany.setEmail(company.get("email"));
+        newCompany.setCnpj(company.get("cnpj"));
+        User user = new User();
+        user.setId(Long.parseLong(company.get("user")));
+        newCompany.setUser_create(user);
         try {
-            companyRepository.save(company);
-            return new ResponseEntity<Company>(company, HttpStatus.CREATED);
+            companyRepository.save(newCompany);
+            return new ResponseEntity<>(newCompany, HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

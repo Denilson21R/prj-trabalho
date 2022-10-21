@@ -1,5 +1,7 @@
 package com.prj.denilson.prjtrabalho.model;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
@@ -49,19 +51,6 @@ public class Schedule {
     @ManyToOne
     @JoinColumn(name = "id_company", nullable = false)
     private Company company;
-
-    public Schedule(long id, LocalDateTime date, User employee_execute, User employee_schedule, List<Service> service, Animal animal, ScheduleStatus scheduleStatus, boolean paid, float amount, Company company) {
-        this.id = id;
-        this.date = date;
-        this.employee_execute = employee_execute;
-        this.employee_schedule = employee_schedule;
-        this.service = service;
-        this.animal = animal;
-        this.scheduleStatus = scheduleStatus;
-        this.paid = paid;
-        this.amount = amount;
-        this.company = company;
-    }
 
     public Schedule() {
     }
@@ -116,6 +105,14 @@ public class Schedule {
 
     public User getEmployee_schedule() {
         return employee_schedule;
+    }
+
+    public ScheduleStatus getScheduleStatus() {
+        return scheduleStatus;
+    }
+
+    public void setScheduleStatus(ScheduleStatus scheduleStatus) {
+        this.scheduleStatus = scheduleStatus;
     }
 
     public List<Service> getService() {

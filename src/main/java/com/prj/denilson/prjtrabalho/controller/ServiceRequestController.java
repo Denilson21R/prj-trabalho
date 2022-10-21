@@ -40,9 +40,7 @@ public class ServiceRequestController {
         serviceRequest.setClient(user);
         //servicedatetime
         String[] dateTime = invite.get("date").split("T"); //arrays date e time
-        LocalDate date = getDateByString(dateTime);
-        LocalTime time = getTimeByString(dateTime);
-        LocalDateTime dateService = LocalDateTime.of(date, time);
+        LocalDateTime dateService = getLocalDateTime(dateTime);
         serviceRequest.setServiceDate(dateService);
         //requestdatetime
         serviceRequest.setCreatedDate(LocalDateTime.now());
@@ -54,22 +52,6 @@ public class ServiceRequestController {
         }
     }
 
-    private static LocalTime getTimeByString(String[] dateTime) {
-        String time = dateTime[1].substring(0, 2) + ":" +dateTime[1].substring(3);
-        return LocalTime.of(
-                Integer.parseInt(dateTime[1].substring(0, 2)), //horas
-                Integer.parseInt(dateTime[1].substring(3)) //minutos
-        );
-    }
-
-    private static LocalDate getDateByString(String[] dateTime) {
-        String date = dateTime[0].substring(0, 4) + "/" + dateTime[0].substring(5, 7) + "/" + dateTime[0].substring(8);
-        return LocalDate.of(
-                Integer.parseInt(dateTime[0].substring(0, 4)), //ano
-                Integer.parseInt(dateTime[0].substring(5, 7)), //mes
-                Integer.parseInt(dateTime[0].substring(8)) //dia
-        );
-    }
 
     @RequestMapping(value = "/service-request/{id}", method =  RequestMethod.PUT)
     public ResponseEntity<ServiceRequest> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newRequest)
@@ -77,14 +59,22 @@ public class ServiceRequestController {
         Optional<ServiceRequest> oldRequest = serviceRequestRepository.findById(id);
         if(oldRequest.isPresent()){
             ServiceRequest newServiceRequest = oldRequest.get();
-            Animal animal = new Animal();
             //animal
-            animal.setId(Long.parseLong(newRequest.get("animal")));
-            newServiceRequest.setAnimal(animal);
+            if(newRequest.get("animal") != null){
+                Animal animal = new Animal();
+                animal.setId(Long.parseLong(newRequest.get("animal")));
+                newServiceRequest.setAnimal(animal);
+            }
             //status
-            newServiceRequest.setStatus(ServiceRequestStatus.values()[Integer.parseInt(newRequest.get("status"))]);
-            //TODO: update service date according to string sended by frontend
-            newServiceRequest.setServiceDate(LocalDateTime.now());
+            if(newRequest.get("status") != null){
+                newServiceRequest.setStatus(ServiceRequestStatus.values()[Integer.parseInt(newRequest.get("status"))]);
+            }
+            //date
+            if(newRequest.get("date") != null){
+                String[] dateTime = newRequest.get("date").split("T");
+                LocalDateTime dateService = getLocalDateTime(dateTime);
+                newServiceRequest.setServiceDate(dateService);
+            }
             try {
                 serviceRequestRepository.save(newServiceRequest);
                 return new ResponseEntity<>(newServiceRequest, HttpStatus.OK);
@@ -103,13 +93,7 @@ public class ServiceRequestController {
         if(oldRequest.isPresent()){
             List<Service> newServices = new ArrayList<>();
             ServiceRequest newServiceRequest = oldRequest.get();
-            String servicesString = services.get("services");
-            String[] servicesList = servicesString.split(", ");
-            for (String newServiceId: servicesList) {
-                Service newServiceObject = new Service();
-                newServiceObject.setId(Long.parseLong(newServiceId));
-                newServices.add(newServiceObject);
-            }
+            convertServicesIdStringToObjects(services, newServices);
             newServiceRequest.setRequested_services(newServices);
             try {
                 ServiceRequest serviceSaved = serviceRequestRepository.save(newServiceRequest);
@@ -119,6 +103,16 @@ public class ServiceRequestController {
             }
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    private static void convertServicesIdStringToObjects(Map<String, String> services, List<Service> newServices) {
+        String servicesString = services.get("services");
+        String[] servicesList = servicesString.split(", ");
+        for (String newServiceId: servicesList) {
+            Service newServiceObject = new Service();
+            newServiceObject.setId(Long.parseLong(newServiceId));
+            newServices.add(newServiceObject);
         }
     }
 
@@ -142,5 +136,27 @@ public class ServiceRequestController {
         }else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+    private static LocalDateTime getLocalDateTime(String[] dateTime) {
+        LocalDate date = getDateByString(dateTime);
+        LocalTime time = getTimeByString(dateTime);
+        return LocalDateTime.of(date, time);
+    }
+
+    private static LocalTime getTimeByString(String[] dateTime) {
+        String time = dateTime[1].substring(0, 2) + ":" +dateTime[1].substring(3);
+        return LocalTime.of(
+                Integer.parseInt(time.substring(0, 2)), //horas
+                Integer.parseInt(time.substring(3, 5)) //minutos
+        );
+    }
+
+    private static LocalDate getDateByString(String[] dateTime) {
+        String date = dateTime[0].substring(0, 4) + "/" + dateTime[0].substring(5, 7) + "/" + dateTime[0].substring(8);
+        return LocalDate.of(
+                Integer.parseInt(date.substring(0, 4)), //ano
+                Integer.parseInt(date.substring(5, 7)), //mes
+                Integer.parseInt(date.substring(8)) //dia
+        );
     }
 }

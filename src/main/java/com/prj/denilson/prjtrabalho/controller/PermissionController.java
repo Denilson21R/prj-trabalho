@@ -30,7 +30,7 @@ public class PermissionController {
         newPermission.setUser(user);
         newPermission.setCompany_owner(Boolean.parseBoolean(permission.get("company_owner")));
         newPermission.setCan_add_schedules(Boolean.parseBoolean(permission.get("can_add_schedules")));
-        newPermission.setCan_add_services(Boolean.parseBoolean(permission.get("can_add_servicescan_add_services")));
+        newPermission.setCan_add_services(Boolean.parseBoolean(permission.get("can_add_services")));
         try {
             permissionRepository.save(newPermission);
             return new ResponseEntity<>(newPermission, HttpStatus.CREATED);

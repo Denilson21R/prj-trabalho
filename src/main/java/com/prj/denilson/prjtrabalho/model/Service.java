@@ -19,7 +19,19 @@ public class Service {
     @Column(nullable = false)
     private float value; //TODO: nao usar primitivo
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
     public Service() {
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public void setDescription(String description) {

@@ -1,6 +1,8 @@
 package com.prj.denilson.prjtrabalho.controller;
 
 import com.prj.denilson.prjtrabalho.model.Animal;
+import com.prj.denilson.prjtrabalho.model.Status;
+import com.prj.denilson.prjtrabalho.model.User;
 import com.prj.denilson.prjtrabalho.repository.AnimalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin("http://localhost:4200")
@@ -35,39 +38,42 @@ public class AnimalController {
     }
 
     @RequestMapping(value = "/animal", method = RequestMethod.POST)
-    public ResponseEntity Post(@RequestBody Animal animal)
+    public ResponseEntity Post(@RequestParam Map<String, String> animal)
     {
+        Animal newAnimal = new Animal();
+        newAnimal.setStatus(Status.ATIVO);
+        newAnimal.setDescription(animal.get("description"));
+        newAnimal.setName(animal.get("name"));
+        User owner = new User();
+        owner.setId(Long.parseLong(animal.get("owner")));
+        newAnimal.setOwner(owner);
+        newAnimal.setSpecie(animal.get("specie"));
         try {
-            animalRepository.save(animal);
-            return new ResponseEntity<Animal>(animal, HttpStatus.CREATED);
+            animalRepository.save(newAnimal);
+            return new ResponseEntity<Animal>(newAnimal, HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @RequestMapping(value = "/animal/{id}", method =  RequestMethod.PUT)
-    public ResponseEntity<Animal> Put(@PathVariable(value = "id") long id, @RequestBody Animal newAnimal)
+    public ResponseEntity<Animal> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newAnimal)
     {
         Optional<Animal> oldAnimal = animalRepository.findById(id);
         if(oldAnimal.isPresent()){
             Animal animal = oldAnimal.get();
-            animal.setName(newAnimal.getName());
-            animal.setDescription(newAnimal.getDescription());
+            if(newAnimal.get("name") != null){
+                animal.setName(newAnimal.get("name"));
+            }
+            if(newAnimal.get("description") != null){
+                animal.setDescription(newAnimal.get("description"));
+            }
+            if(newAnimal.get("status") != null){
+                animal.setStatus(Status.values()[Integer.parseInt(newAnimal.get("status"))]);
+            }
             animalRepository.save(animal);
             return new ResponseEntity<>(animal, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @RequestMapping(value = "/animal/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Animal> Delete(@PathVariable(value = "id") long id)
-    {
-        Optional<Animal> animal = animalRepository.findById(id);
-        if(animal.isPresent()){
-            animalRepository.delete(animal.get());
-            return new ResponseEntity<>(HttpStatus.OK);
-        }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
