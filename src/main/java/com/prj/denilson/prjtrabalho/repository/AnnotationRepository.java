@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface AnnotationRepository extends JpaRepository<Annotation, Long> {
-    @Query(value = "SELECT n FROM Annotation n WHERE id_schedule = ?1")
+    @Query(value = "SELECT n FROM Annotation n WHERE n.schedule.id = ?1")
     List<Annotation> findAnnotationBySchedule(Long id);
 }

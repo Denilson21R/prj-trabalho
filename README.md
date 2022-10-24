@@ -78,47 +78,44 @@
 26. PUT ```/schedule/{id}```
     - Atualiza um agendamento e retorna seus dados
 
-27. DELETE ```/schedule/{id}```
-    - Deleta uma nota e retorna 204 em caso de sucesso
-
-28. GET ```/schedule/{id}/annotation```
+27. GET ```/schedule/{id}/annotation```
     - Retorna todas as notas de um agendamento
 
-29. GET ```/annotation/{id}```
+28. GET ```/annotation/{id}```
     - Retorna os dados de uma nota
 
-30. POST ```/annotation```
+29. POST ```/annotation```
     - Adiciona uma nota e retorna seus dados
 
-31. PUT ```/annotation/{id}```
+30. PUT ```/annotation/{id}```
     - Atualiza uma nota e retorna seus dados
 
-32. DELETE ```/annotation/{id}```
+31. DELETE ```/annotation/{id}```
     - Deleta uma nota e retorna 204 em caso de sucesso
 
-33. POST ```/service-request```
+32. POST ```/service-request```
     - Adiciona uma requisição de serviço e retorna seus dados
 
-34. PUT ```/service-request/{id}```
+33. PUT ```/service-request/{id}```
     - Atualiza uma requisição de serviço e retorna seus dados
 
-35. PATCH ```/service-request/{id}/services```
+34. PATCH ```/service-request/{id}/services```
     - Atualiza uma lista com os serviços de uma requisição de serviço e retorna a requisição completa
 
-36. GET ```/requests/company/{id}```
+35. GET ```/requests/company/{id}```
     - Retorna as requisições de serviço de uma empresa
 
-37. GET ```/requests/user/{id}```
+36. GET ```/requests/user/{id}```
     - Retorna as requisições de serviço de um usuário
 
-38. POST ```/invite```
+37. POST ```/invite```
     - Adiciona um convite para empresa e retorna seus dados
 
-39. PATCH ```/invite/{id}```
+38. PATCH ```/invite/{id}```
     - Atualiza o status de um convite para empresa
 
-40. GET ```/invites/user/{id}```
+39. GET ```/invites/user/{id}```
     - Retorna os convites para empresa de um usuário
 
-41. GET ```/invites/company/{id}```
+40. GET ```/invites/company/{id}```
     - Retorna os convites para empresa de uma empresa

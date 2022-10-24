@@ -19,12 +19,12 @@ public class UserController {
     private UserRepository userRepository;
 
     @RequestMapping(value = "/user/authenticate", method = RequestMethod.POST)
-    public ResponseEntity PostAuthenticate(@RequestParam Map<String, String> pessoa)
+    public ResponseEntity<User> PostAuthenticate(@RequestParam Map<String, String> pessoa)
     {
         try {
             User userAuthenticate = userRepository.getUserByEmail(pessoa.get("email"));
             if(BCrypt.checkpw(pessoa.get("password"), userAuthenticate.getPassword())){
-                return new ResponseEntity<User>(userAuthenticate, HttpStatus.OK);
+                return new ResponseEntity<>(userAuthenticate, HttpStatus.OK);
             }else{
                 return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
             }
@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public ResponseEntity Post(@RequestParam Map<String, String> pessoa)
+    public ResponseEntity<User> Post(@RequestParam Map<String, String> pessoa)
     {
         User user = new User();
         user.setName(pessoa.get("name"));
@@ -56,7 +56,7 @@ public class UserController {
         user.setType(UserType.values()[Integer.parseInt(pessoa.get("type"))]);
         try {
             User newUser = userRepository.save(user);
-            return new ResponseEntity<User>(user, HttpStatus.CREATED);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
         }catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -71,6 +71,9 @@ public class UserController {
             user.setName(newUser.get("name"));
             user.setPhone(newUser.get("phone"));
             user.setEmail(newUser.get("email"));
+            if(newUser.get("password") != null){
+                user.setPassword(newUser.get("password"));
+            }
             try {
                 userRepository.save(user);
                 return new ResponseEntity<User>(user, HttpStatus.OK);

@@ -94,17 +94,17 @@ public class ScheduleController {
     }
 
     @RequestMapping(value = "/schedule/{id}", method =  RequestMethod.PUT)
-    public ResponseEntity<Schedule> Put(@PathVariable(value = "id") long id, @RequestBody Schedule newSchedule)
+    public ResponseEntity<Schedule> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newSchedule)
     {
         Optional<Schedule> oldSchedule = scheduleRepository.findById(id);
         if(oldSchedule.isPresent()){
             Schedule schedule = oldSchedule.get();
-            schedule.setAmount(newSchedule.getAmount());
-            schedule.setDate(newSchedule.getDate());
-            schedule.setEmployee_execute(newSchedule.getEmployee_execute());
-            schedule.setStatus(newSchedule.getStatus());
-            schedule.setPaid(newSchedule.isPaid());
-            schedule.setService(newSchedule.getService());
+            if(newSchedule.get("status") != null){
+                schedule.setStatus(ScheduleStatus.values()[Integer.parseInt(newSchedule.get("status"))]);
+            }
+            if(newSchedule.get("paid") != null){
+                schedule.setPaid(Boolean.parseBoolean(newSchedule.get("paid")));
+            }
             try {
                 scheduleRepository.save(schedule);
                 return new ResponseEntity<>(schedule, HttpStatus.OK);
@@ -112,18 +112,6 @@ public class ScheduleController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @RequestMapping(value = "/schedule/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity Delete(@PathVariable(value = "id") long id)
-    {
-        Optional<Schedule> schedule = scheduleRepository.findById(id);
-        if(schedule.isPresent()){
-            scheduleRepository.delete(schedule.get());
-            return new ResponseEntity<>(HttpStatus.OK);
-        }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
