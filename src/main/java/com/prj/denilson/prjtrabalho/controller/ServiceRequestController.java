@@ -137,6 +137,32 @@ public class ServiceRequestController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+
+    //get quantity servicerequest opening for user
+    @RequestMapping(value = "/requests/user/{id}/quantity", method = RequestMethod.GET)
+    public ResponseEntity<Integer> GetQtddRequestsByUserId(@PathVariable(value = "id") long id)
+    {
+        try{
+            Integer qtd_requests = serviceRequestRepository.getQtddRequestsByUser(id);
+            return new ResponseEntity<>(qtd_requests, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //get quantity servicerequest opening for company
+    @RequestMapping(value = "/requests/company/{id}/quantity", method = RequestMethod.GET)
+    public ResponseEntity<Integer> GetQtddRequestsByCompanyId(@PathVariable(value = "id") long id)
+    {
+        try{
+            Integer qtd_requests = serviceRequestRepository.getQtddRequestsByCompany(id);
+            return new ResponseEntity<>(qtd_requests, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     private static LocalDateTime getLocalDateTime(String[] dateTime) {
         LocalDate date = getDateByString(dateTime);
         LocalTime time = getTimeByString(dateTime);

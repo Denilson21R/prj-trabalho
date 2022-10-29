@@ -62,14 +62,16 @@ public class CompanyController {
     }
 
     @RequestMapping(value = "/company/{id}", method =  RequestMethod.PUT)
-    public ResponseEntity<Company> Put(@PathVariable(value = "id") long id, @RequestBody Company newCompany)
+    public ResponseEntity<Company> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newCompany)
     {
         Optional<Company> oldCompany = companyRepository.findById(id);
         if(oldCompany.isPresent()){
             Company company = oldCompany.get();
-            //company.setCompany_name(newCompany.getCompany_name());
-            company.setEmail(newCompany.getEmail());
-            //company.setStatus(newCompany.getStatus());
+            company.setEmail(newCompany.get("email"));
+            company.setCompany_name(newCompany.get("name"));
+            if(newCompany.get("cnpj") != null){
+                company.setCnpj(newCompany.get("cnpj"));
+            }
             companyRepository.save(company);
             return new ResponseEntity<>(company, HttpStatus.OK);
         }else{

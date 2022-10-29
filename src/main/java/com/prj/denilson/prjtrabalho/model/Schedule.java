@@ -18,10 +18,6 @@ public class Schedule {
     private LocalDateTime date;
 
     @ManyToOne
-    @JoinColumn(name = "employee_execute_id")
-    private User employee_execute;
-
-    @ManyToOne
     @JoinColumn(name = "employee_schedule_id", nullable = false, updatable = false)
     private User employee_schedule;
 
@@ -59,10 +55,6 @@ public class Schedule {
         this.date = date;
     }
 
-    public void setEmployee_execute(User employee_execute) {
-        this.employee_execute = employee_execute;
-    }
-
     public void setEmployee_schedule(User employee_schedule) {
         this.employee_schedule = employee_schedule;
     }
@@ -97,10 +89,6 @@ public class Schedule {
 
     public LocalDateTime getDate() {
         return date;
-    }
-
-    public User getEmployee_execute() {
-        return employee_execute;
     }
 
     public User getEmployee_schedule() {

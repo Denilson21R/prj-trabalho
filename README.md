@@ -78,44 +78,41 @@
 26. PUT ```/schedule/{id}```
     - Atualiza um agendamento e retorna seus dados
 
-27. GET ```/schedule/{id}/annotation```
-    - Retorna todas as notas de um agendamento
+27. GET ```/schedules/company/{id}/quantity```
+    - Retorna a quantidade de agendamentos novos que a empresa tem hoje
 
-28. GET ```/annotation/{id}```
-    - Retorna os dados de uma nota
+28. GET ```/schedules/user/{id}/quantity```
+    - Retorna a quantidade de agendamentos novos que o usuário tem hoje
 
-29. POST ```/annotation```
-    - Adiciona uma nota e retorna seus dados
-
-30. PUT ```/annotation/{id}```
-    - Atualiza uma nota e retorna seus dados
-
-31. DELETE ```/annotation/{id}```
-    - Deleta uma nota e retorna 204 em caso de sucesso
-
-32. POST ```/service-request```
+29. POST ```/service-request```
     - Adiciona uma requisição de serviço e retorna seus dados
 
-33. PUT ```/service-request/{id}```
+30. PUT ```/service-request/{id}```
     - Atualiza uma requisição de serviço e retorna seus dados
 
-34. PATCH ```/service-request/{id}/services```
+31. PATCH ```/service-request/{id}/services```
     - Atualiza uma lista com os serviços de uma requisição de serviço e retorna a requisição completa
 
-35. GET ```/requests/company/{id}```
+32. GET ```/requests/company/{id}```
     - Retorna as requisições de serviço de uma empresa
 
-36. GET ```/requests/user/{id}```
+33. GET ```/requests/user/{id}```
     - Retorna as requisições de serviço de um usuário
 
-37. POST ```/invite```
+34. GET ```/requests/user/{id}/quantity```
+    - Retorna a quantidade de pedidos abertos do usuário
+
+35. GET ```/requests/user/{id}```
+    - Retorna a quantidade de pedidos abertos da empresa
+
+36. POST ```/invite```
     - Adiciona um convite para empresa e retorna seus dados
 
-38. PATCH ```/invite/{id}```
+37. PATCH ```/invite/{id}```
     - Atualiza o status de um convite para empresa
 
-39. GET ```/invites/user/{id}```
+38. GET ```/invites/user/{id}```
     - Retorna os convites para empresa de um usuário
 
-40. GET ```/invites/company/{id}```
+39. GET ```/invites/company/{id}```
     - Retorna os convites para empresa de uma empresa

@@ -12,4 +12,10 @@ public interface ServiceRequestRepository extends JpaRepository<ServiceRequest, 
 
     @Query(value = "SELECT r FROM ServiceRequest r WHERE r.company.id = ?1 AND r.status = 'ABERTO'")
     List<ServiceRequest> findRequestsByCompanyId(long id);
+
+    @Query(value = "SELECT count(r) FROM ServiceRequest r WHERE r.client.id = ?1 AND r.status = 'ABERTO'")
+    Integer getQtddRequestsByUser(long id);
+
+    @Query(value = "SELECT count(r) FROM ServiceRequest r WHERE r.company.id = ?1 AND r.status = 'ABERTO'")
+    Integer getQtddRequestsByCompany(long id);
 }
