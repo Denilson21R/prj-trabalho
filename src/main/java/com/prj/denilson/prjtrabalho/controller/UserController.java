@@ -26,10 +26,10 @@ public class UserController {
             if(BCrypt.checkpw(pessoa.get("password"), userAuthenticate.getPassword())){
                 return new ResponseEntity<>(userAuthenticate, HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
             }
         }catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         }
     }
 
