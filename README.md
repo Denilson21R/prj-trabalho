@@ -1,118 +1,603 @@
-### ENDPOINTS
+## ENDPOINTS
 
-1. POST ```/user/authenticate```
-   - Verifica e-mail e senha de um usuário e retorna seus dados completos se estiverem corretos
+#### 1. POST ```/user/authenticate```
+- Parêmetros
 
-2. GET ```/user/{id}```
-    - Retorna os dados de um usuário
+|   nome    |  obrigatório  |  tipo   | 
+|:---------:|:-------------:|:-------:|
+| password  |  obrigatório  | string  |
+|   email   |  obrigatório  | string  |
 
-3. POST ```/user```
-   - Adiciona um novo usuário e retorna seus dados
+- Retornos
 
-4. PUT ```/user/{id}```
-   - Atualiza um usuário e retorna os dados novos
+|     dados      | status |      condição       |
+|:--------------:|:------:|:-------------------:|
+| objeto usuário |  200   |       sucesso       |
+|                |  204   | usuário inexistente |
 
-5. GET ```/user/{id}/animals```
-   - Retorna uma lista com os animais de um usuário
+#### 2. GET ```/user/{id}```
+- Parêmetros
 
-6. GET ```/animal/{id}```
-   - Retorna os dados de um animal
+| nome  |  obrigatório  |     tipo      | 
+|:-----:|:-------------:|:-------------:|
+|  id   |  obrigatório  | string na url |
 
-7. POST ```/animal```
-   - Adiciona um novo animal e retorna seus dados
+- Retornos
 
-8. PUT ```/animal/{id}```
-   - Atualiza um animal e retorna os dados novos
+|     dados      | status |      condição       |
+|:--------------:|:------:|:-------------------:|
+| objeto usuário |  200   |       sucesso       |
+|                |  404   | usuário inexistente |
 
-9. POST ```/company```
-   - Adiciona uma empresa e retorna seus dados
+#### 3. POST ```/user```
+- Parêmetros
 
-10. GET ```/company/{id}```
-    - Retorna os dados de uma empresa
+|   nome   | obrigatório |    tipo    | 
+|:--------:|:-----------:|:----------:|
+|   name   | obrigatório |   string   |
+| password | obrigatório |   string   |
+|  email   | obrigatório |   string   |
+|  phone   |  opcional   |   string   |
+|   type   | obrigatório |  inteiro   |
 
-11. GET ```/companies```
-    - Retorna uma lista com todas as empresas ativas
-    
-12. PUT ```/company/{id}```
-    - Atualiza uma empresa e retorna seus dados
+- Retornos
 
-13. GET ```/company/{id}/users```
-    - Retorna todos os usuarios de uma empresa
+|     dados      | status |          condição           |
+|:--------------:|:------:|:---------------------------:|
+| objeto usuário |  201   |           sucesso           |
+|                |  500   |            erro             |
+|                |  422   | ausência de algum parâmetro |
 
-14. POST ```/permission/```
-    - Adiciona uma permissão e retorna seus dados
+#### 4. PUT ```/user/{id}```
+- Parêmetros
 
-15. GET ```/permission/{id}```
-    - Retorna os dados de uma permissão
+|   nome   | obrigatório |     tipo      | 
+|:--------:|:-----------:|:-------------:|
+|    id    | obrigatório | string na url |
+|   name   | obrigatório |    string     |
+| password |  opcional   |    string     |
+|  email   | obrigatório |    string     |
+|  phone   |  opcional   |    string     |
 
-16. PATCH ```/permission/{id}```
-    - Atualiza uma permissão e retorna seus dados
+- Retornos
 
-17. DELETE ```/permission/{id}```
-    - Deleta uma permissão e retorna 204 em caso de sucesso
+|     dados      | status |          condição           |
+|:--------------:|:------:|:---------------------------:|
+| objeto usuário |  200   |           sucesso           |
+|                |  500   |            erro             |
+|                |  422   | ausência de algum parâmetro |
+|                |  404   |   usuário não encontrado    |
 
-18. GET ```/company/{id}/services```
-    - Retorna todos os serviços de uma empresa
+#### 5. GET ```/user/{id}/animals```
+- Parêmetros
 
-19. POST ```/service```
-    - Adiciona um serviço e retorna seus dados
+|   nome   | obrigatório |     tipo      | 
+|:--------:|:-----------:|:-------------:|
+|    id    | obrigatório | string na url |
 
-20. GET ```/service/{id}```
-    - Retorna os dados de um serviço
+- Retornos
 
-21. PUT ```/service/{id}```
-    - Atualiza um serviço e retorna seus dados
+|          dados          | status | condição |
+|:-----------------------:|:------:|:--------:|
+| lista de objetos animal |  200   | sucesso  |
+|                         |  500   |   erro   |
 
-22. GET ```/schedules/client/{id}```
-    - Retorna os dados de um agendamento
+#### 6. GET ```/animal/{id}```
+- Parêmetros
 
-23. GET ```/schedule/{id}```
-    - Retorna os dados de um agendamento
+|   nome   | obrigatório |     tipo      | 
+|:--------:|:-----------:|:-------------:|
+|    id    | obrigatório | string na url |
 
-24. GET ```/company/{id}/schedules```
-    - Retorna todos os agendamentos de uma empresa
+- Retornos
 
-25. POST ```/schedule```
-    - Adiciona um agendamento e retorna seus dados
+|     dados     | status |       condição        |
+|:-------------:|:------:|:---------------------:|
+| objeto animal |  200   |        sucesso        |
+|               |  404   | animal não encontrado |
+|               |  500   |         erro          |
 
-26. PUT ```/schedule/{id}```
-    - Atualiza um agendamento e retorna seus dados
+#### 7. POST ```/animal```
+- Parêmetros
 
-27. GET ```/schedules/company/{id}/quantity```
-    - Retorna a quantidade de agendamentos novos que a empresa tem hoje
+|    nome     | obrigatório |  tipo  | 
+|:-----------:|:-----------:|:------:|
+| description | obrigatório | string |
+|    name     | obrigatório | string |
+|    owner    | obrigatório |  long  |
+|   specie    | obrigatório | string |
 
-28. GET ```/schedules/user/{id}/quantity```
-    - Retorna a quantidade de agendamentos novos que o usuário tem hoje
+- Retornos
 
-29. POST ```/service-request```
-    - Adiciona uma requisição de serviço e retorna seus dados
+|     dados     | status |          condição           |
+|:-------------:|:------:|:---------------------------:|
+| objeto animal |  201   |           sucesso           |
+|               |  422   | ausência de algum parâmetro |
+|               |  500   |            erro             |
 
-30. PUT ```/service-request/{id}```
-    - Atualiza uma requisição de serviço e retorna seus dados
+#### 8. PUT ```/animal/{id}```
+- Parêmetros
 
-31. PATCH ```/service-request/{id}/services```
-    - Atualiza uma lista com os serviços de uma requisição de serviço e retorna a requisição completa
+|    nome     | obrigatório |  tipo   | 
+|:-----------:|:-----------:|:-------:|
+| description |  opcional   | string  |
+|    name     |  opcional   | string  |
+|   status    |  opcional   | inteiro |
 
-32. GET ```/requests/company/{id}```
-    - Retorna as requisições de serviço de uma empresa
+- Retornos
 
-33. GET ```/requests/user/{id}```
-    - Retorna as requisições de serviço de um usuário
+|     dados     | status |       condição        |
+|:-------------:|:------:|:---------------------:|
+| objeto animal |  200   |        sucesso        |
+|               |  422   | animal não encontrado |
+|               |  500   |         erro          |
 
-34. GET ```/requests/user/{id}/quantity```
-    - Retorna a quantidade de pedidos abertos do usuário
+#### 9. POST ```/company```
+- Parêmetros
 
-35. GET ```/requests/user/{id}```
-    - Retorna a quantidade de pedidos abertos da empresa
+| nome  | obrigatório |  tipo   | 
+|:-----:|:-----------:|:-------:|
+| name  | obrigatório | string  |
+| email | obrigatório | string  |
+| cnpj  |  opcional   | string  |
+| user  | obrigatório | inteiro |
 
-36. POST ```/invite```
-    - Adiciona um convite para empresa e retorna seus dados
+- Retornos
 
-37. PATCH ```/invite/{id}```
-    - Atualiza o status de um convite para empresa
+|     dados      | status |          condição           |
+|:--------------:|:------:|:---------------------------:|
+| objeto empresa |  201   |           sucesso           |
+|                |  422   | ausência de algum parâmetro |
+|                |  500   |            erro             |
 
-38. GET ```/invites/user/{id}```
-    - Retorna os convites para empresa de um usuário
+#### 10. GET ```/company/{id}```
+- Parêmetros
 
-39. GET ```/invites/company/{id}```
-    - Retorna os convites para empresa de uma empresa
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|     dados      | status |        condição        |
+|:--------------:|:------:|:----------------------:|
+| objeto empresa |  200   |        sucesso         |
+|                |  404   | empresa não encontrada |
+
+#### 11. GET ```/companies```
+- Requisição sem parêmetros
+
+- Retornos
+
+|          dados           | status | condição |
+|:------------------------:|:------:|:--------:|
+| lista de objetos empresa |  200   | sucesso  |
+|                          |  500   |   erro   |
+
+#### 12. PUT ```/company/{id}```
+- Parêmetros
+
+| nome  | obrigatório |  tipo  | 
+|:-----:|:-----------:|:------:|
+| email | obrigatório | string |
+| name  | obrigatório | string |
+| cnpj  |  opcional   | string |
+
+- Retornos
+
+|     dados      | status |          condição           |
+|:--------------:|:------:|:---------------------------:|
+| objeto empresa |  200   |           sucesso           |
+|                |  404   |   empresa não encontrada    |
+|                |  500   |            erro             |
+|                |  422   | ausência de algum parâmetro |
+
+#### 13. GET ```/company/{id}/users```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|          dados           | status | condição |
+|:------------------------:|:------:|:--------:|
+| lista de objetos usuário |  200   | sucesso  |
+|                          |  500   |   erro   |
+
+#### 14. POST ```/permission/```
+- Parêmetros
+
+|       nome        | obrigatório |   tipo   | 
+|:-----------------:|:-----------:|:--------:|
+|      company      | obrigatório | integer  |
+|       user        | obrigatório | integer  |
+|   company_owner   | obrigatório | integer  |
+| can_add_schedules | obrigatório | booleano |
+| can_add_services  | obrigatório | booleano |
+
+- Retornos
+
+|      dados       | status |          condição           |
+|:----------------:|:------:|:---------------------------:|
+| objeto permissão |  201   |           sucesso           |
+|                  |  500   |            erro             |
+|                  |  422   | ausência de algum parâmetro |
+
+#### 15. GET ```/permission/{id}```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|      dados       | status |         condição         |
+|:----------------:|:------:|:------------------------:|
+| objeto permissão |  200   |         sucesso          |
+|                  |  500   |           erro           |
+|                  |  404   | permissão não encontrada |
+
+#### 16. PATCH ```/permission/{id}```
+- Parêmetros
+
+|   nome    | obrigatório |     tipo      | 
+|:---------:|:-----------:|:-------------:|
+|    id     | obrigatório | string na url |
+| schedules | obrigatório |   booleano    |
+| services  | obrigatório |   booleano    |
+
+- Retornos
+
+|      dados       | status |           condição            |
+|:----------------:|:------:|:-----------------------------:|
+| objeto permissão |  200   |            sucesso            |
+|                  |  500   |             erro              |
+|                  |  404   |   permissão não encontrada    |
+|                  |  422   | ausência de alguns parâmetros |
+
+#### 17. GET ```/company/{id}/services```
+- Parêmetros
+
+|   nome    | obrigatório |     tipo      | 
+|:---------:|:-----------:|:-------------:|
+|    id     | obrigatório | string na url |
+
+- Retornos
+
+|          dados           | status | condição |
+|:------------------------:|:------:|:--------:|
+| lista de objetos serviço |  200   | sucesso  |
+|                          |  500   |   erro   |
+
+#### 18. POST ```/service```
+- Parêmetros
+
+|    nome     | obrigatório |  tipo   | 
+|:-----------:|:-----------:|:-------:|
+| description | obrigatório | string  |
+|    value    | obrigatório |  float  |
+|   company   | obrigatório | inteiro |
+
+- Retornos
+
+|     dados      | status |          condição           |
+|:--------------:|:------:|:---------------------------:|
+| objeto serviço |  201   |           sucesso           |
+|                |  500   |            erro             |
+|                |  422   | ausência de algum parâmetro |
+
+#### 19. GET ```/service/{id}```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|     dados      | status |        condição        |
+|:--------------:|:------:|:----------------------:|
+| objeto serviço |  200   |        sucesso         |
+|                |  500   |          erro          |
+|                |  404   | serviço não encontrado |
+
+#### 20. PUT ```/service/{id}```
+- Parêmetros
+
+|    nome     | obrigatório |                  tipo                  | 
+|:-----------:|:-----------:|:--------------------------------------:|
+|     id      | obrigatório |             string na url              |
+| description | obrigatório |                 string                 |
+|    value    | obrigatório |                 float                  |
+|   status    | obrigatório | integer(0 para ativo e 1 para inativo) |
+
+- Retornos
+
+|     dados      | status |          condição           |
+|:--------------:|:------:|:---------------------------:|
+| objeto serviço |  200   |           sucesso           |
+|                |  500   |            erro             |
+|                |  404   |   serviço não encontrado    |
+|                |  422   | ausência de algum parâmetro |
+
+#### 21. GET ```/schedules/client/{id}```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|            dados             | status | condição |
+|:----------------------------:|:------:|:--------:|
+| lista de objetos agendamento |  200   | sucesso  |
+|                              |  500   |   erro   |
+
+#### 22. GET ```/schedule/{id}```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|       dados        | status |          condição          |
+|:------------------:|:------:|:--------------------------:|
+| objeto agendamento |  200   |          sucesso           |
+|                    |  500   |            erro            |
+|                    |  404   | agendamento não encontrado |
+
+#### 23. POST ```/schedule```
+- Parêmetros
+
+|       nome        | obrigatório |                 tipo                 | 
+|:-----------------:|:-----------:|:------------------------------------:|
+|     services      | obrigatório | array de string separado por vírgula |
+|      amount       | obrigatório |                float                 |
+|       date        | obrigatório |            localdatetime             |
+|      animal       | obrigatório |               inteiro                |
+|      company      | obrigatório |               inteiro                |
+| employee_schedule | obrigatório |               inteiro                |
+
+- Retornos
+
+|       dados        | status |          condição           |
+|:------------------:|:------:|:---------------------------:|
+| objeto agendamento |  201   |           sucesso           |
+|                    |  500   |            erro             |
+|                    |  422   | ausência de algum parâmetro |
+
+#### 25. PUT ```/schedule/{id}```
+- Parêmetros
+
+|   nome   | obrigatório |                 tipo                 | 
+|:--------:|:-----------:|:------------------------------------:|
+| services | obrigatório | array de string separado por vírgula |
+|  status  |  opcional   |               inteiro                |
+|   paid   |  opcional   |               booleano               |
+
+- Retornos
+
+|       dados        | status |          condição          |
+|:------------------:|:------:|:--------------------------:|
+| objeto agendamento |  200   |          sucesso           |
+|                    |  500   |            erro            |
+|                    |  404   | agendamento não encontrado |
+
+#### 24. GET ```/company/{id}/schedules```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|       dados        | status | condição |
+|:------------------:|:------:|:--------:|
+| objeto agendamento |  200   | sucesso  |
+|                    |  500   |   erro   |
+
+#### 26. GET ```/schedules/company/{id}/quantity```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|  dados  | status | condição |
+|:-------:|:------:|:--------:|
+| inteiro |  200   | sucesso  |
+|         |  500   |   erro   |
+
+#### 27. GET ```/schedules/user/{id}/quantity```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|  dados  | status | condição |
+|:-------:|:------:|:--------:|
+| inteiro |  200   | sucesso  |
+|         |  500   |   erro   |
+
+#### 28. POST ```/service-request```
+- Parêmetros
+
+|  nome   | obrigatório |     tipo      | 
+|:-------:|:-----------:|:-------------:|
+| animal  | obrigatório | string na url |
+|  user   | obrigatório | string na url |
+| company | obrigatório | string na url |
+|  date   | obrigatório | string na url |
+
+- Retornos
+
+|          dados           | status |          condição           |
+|:------------------------:|:------:|:---------------------------:|
+| objeto pedido de serviço |  201   |           sucesso           |
+|                          |  500   |            erro             |
+|                          |  422   | ausência de algum parâmetro |
+
+#### 29. PUT ```/service-request/{id}```
+- Parêmetros
+
+|  nome  | obrigatório |     tipo      | 
+|:------:|:-----------:|:-------------:|
+|   id   | obrigatório | string na url |
+| animal |  opcional   |    inteiro    |
+| status |  opcional   |    inteiro    |
+|  date  |  opcional   | localdatetime |
+
+- Retornos
+
+|          dados           | status |       condição        |
+|:------------------------:|:------:|:---------------------:|
+| objeto pedido de serviço |  200   |        sucesso        |
+|                          |  500   |         erro          |
+|                          |  404   | pedido não encontrado |
+
+#### 30. PATCH ```/service-request/{id}/services```
+- Parêmetros
+
+|   nome   | obrigatório |                 tipo                 | 
+|:--------:|:-----------:|:------------------------------------:|
+|    id    | obrigatório |            string na url             |
+| services | obrigatório | array de string separado por vírgula |
+
+- Retornos
+
+|          dados           | status |          condição           |
+|:------------------------:|:------:|:---------------------------:|
+| objeto pedido de serviço |  200   |           sucesso           |
+|                          |  500   |            erro             |
+|                          |  404   |    pedido não encontrado    |
+|                          |  422   | ausência de algum parâmetro |
+
+#### 31. GET ```/requests/company/{id}```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|               dados                | status | condição |
+|:----------------------------------:|:------:|:--------:|
+| lista de objetos pedido de serviço |  200   | sucesso  |
+|                                    |  500   |   erro   |
+
+#### 32. GET ```/requests/user/{id}```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|               dados                | status | condição |
+|:----------------------------------:|:------:|:--------:|
+| lista de objetos pedido de serviço |  200   | sucesso  |
+|                                    |  500   |   erro   |
+
+#### 33. GET ```/requests/user/{id}/quantity```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|  dados  | status | condição |
+|:-------:|:------:|:--------:|
+| inteiro |  200   | sucesso  |
+|         |  500   |   erro   |
+
+#### 34. GET ```/requests/company/{id}/quantity```
+- Parêmetros
+
+| nome | obrigatório |     tipo      | 
+|:----:|:-----------:|:-------------:|
+|  id  | obrigatório | string na url |
+
+- Retornos
+
+|  dados  | status | condição |
+|:-------:|:------:|:--------:|
+| inteiro |  200   | sucesso  |
+|         |  500   |   erro   |
+
+#### 35. POST ```/invite```
+- Parêmetros
+
+|  nome   | obrigatório |  tipo   | 
+|:-------:|:-----------:|:-------:|
+|  email  | obrigatório | string  |
+| company | obrigatório | inteiro |
+
+- Retornos
+
+|     dados      | status |          condição           |
+|:--------------:|:------:|:---------------------------:|
+| objeto convite |  201   |           sucesso           |
+|                |  500   |            erro             |
+|                |  404   |   convite não encontrado    |
+|                |  422   | ausência de algum parâmetro |
+
+#### 36. PATCH ```/invite/{id}```
+- Parêmetros
+
+|  nome  | obrigatório |     tipo      | 
+|:------:|:-----------:|:-------------:|
+|   id   | obrigatório | string na url |
+| status | obrigatório |    inteiro    |
+
+- Retornos
+
+|     dados      | status |           condição           |
+|:--------------:|:------:|:----------------------------:|
+| objeto convite |  200   |           sucesso            |
+|                |  500   |             erro             |
+|                |  404   |    convite não encontrado    |
+|                |  422   | ausência do parâmetro status |
+
+#### 37. GET ```/invites/user/{id}```
+- Parêmetros
+
+|  nome  | obrigatório |     tipo      | 
+|:------:|:-----------:|:-------------:|
+|   id   | obrigatório | string na url |
+
+- Retornos
+
+|          dados           | status | condição |
+|:------------------------:|:------:|:--------:|
+| lista de objetos convite |  200   | sucesso  |
+|                          |  500   |   erro   |
+
+#### 38. GET ```/invites/company/{id}```
+- Parêmetros
+
+|  nome  | obrigatório |     tipo      | 
+|:------:|:-----------:|:-------------:|
+|   id   | obrigatório | string na url |
+
+- Retornos
+
+|          dados           | status | condição |
+|:------------------------:|:------:|:--------:|
+| lista de objetos convite |  200   | sucesso  |
+|                          |  500   |   erro   |

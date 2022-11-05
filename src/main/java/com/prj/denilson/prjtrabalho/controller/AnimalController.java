@@ -22,38 +22,51 @@ public class AnimalController {
     @RequestMapping(value = "/user/{id}/animals", method = RequestMethod.GET)
     public ResponseEntity<List<Animal>> Get(@PathVariable(value = "id") long id)
     {
-        List<Animal> animals = animalRepository.findAnimalsByUser(id);
-        return new ResponseEntity<>(animals, HttpStatus.OK);
+        try {
+            List<Animal> animals = animalRepository.findAnimalsByUser(id);
+            return new ResponseEntity<>(animals, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/animal/{id}", method = RequestMethod.GET)
     public ResponseEntity<Animal> GetById(@PathVariable(value = "id") long id)
     {
-        Optional<Animal> animal = animalRepository.findById(id);
-        if(animal.isPresent()) {
-            return new ResponseEntity<Animal>(animal.get(), HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try{
+            Optional<Animal> animal = animalRepository.findById(id);
+            if (animal.isPresent()) {
+                return new ResponseEntity<>(animal.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @RequestMapping(value = "/animal", method = RequestMethod.POST)
-    public ResponseEntity Post(@RequestParam Map<String, String> animal)
+    public ResponseEntity<Animal> Post(@RequestParam Map<String, String> animal)
     {
-        Animal newAnimal = new Animal();
-        newAnimal.setStatus(Status.ATIVO);
-        newAnimal.setDescription(animal.get("description"));
-        newAnimal.setName(animal.get("name"));
-        User owner = new User();
-        owner.setId(Long.parseLong(animal.get("owner")));
-        newAnimal.setOwner(owner);
-        newAnimal.setSpecie(animal.get("specie"));
-        try {
-            animalRepository.save(newAnimal);
-            return new ResponseEntity<Animal>(newAnimal, HttpStatus.CREATED);
-        }catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        if(animal.containsKey("description") && animal.containsKey("name")){
+            Animal newAnimal = new Animal();
+            newAnimal.setStatus(Status.ATIVO);
+            newAnimal.setDescription(animal.get("description"));
+            newAnimal.setName(animal.get("name"));
+            User owner = new User();
+            owner.setId(Long.parseLong(animal.get("owner")));
+            newAnimal.setOwner(owner);
+            newAnimal.setSpecie(animal.get("specie"));
+            try {
+                animalRepository.save(newAnimal);
+                return new ResponseEntity<>(newAnimal, HttpStatus.CREATED);
+            }catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
+
     }
 
     @RequestMapping(value = "/animal/{id}", method =  RequestMethod.PUT)
@@ -62,19 +75,23 @@ public class AnimalController {
         Optional<Animal> oldAnimal = animalRepository.findById(id);
         if(oldAnimal.isPresent()){
             Animal animal = oldAnimal.get();
-            if(newAnimal.get("name") != null){
+            if(newAnimal.containsKey("name")){
                 animal.setName(newAnimal.get("name"));
             }
-            if(newAnimal.get("description") != null){
+            if(newAnimal.containsKey("description")){
                 animal.setDescription(newAnimal.get("description"));
             }
-            if(newAnimal.get("status") != null){
+            if(newAnimal.containsKey("status")){
                 animal.setStatus(Status.values()[Integer.parseInt(newAnimal.get("status"))]);
             }
-            animalRepository.save(animal);
-            return new ResponseEntity<>(animal, HttpStatus.OK);
+            try {
+                animalRepository.save(animal);
+                return new ResponseEntity<>(animal, HttpStatus.OK);
+            }catch (Exception e){
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 }

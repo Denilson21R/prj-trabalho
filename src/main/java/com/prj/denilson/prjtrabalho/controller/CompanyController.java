@@ -23,19 +23,25 @@ public class CompanyController {
     @RequestMapping(value = "/company", method = RequestMethod.POST)
     public ResponseEntity<Company> Post(@RequestParam Map<String, String> company)
     {
-        Company newCompany = new Company();
-        newCompany.setStatus(CompanyStatus.ATIVO);
-        newCompany.setCompany_name(company.get("name"));
-        newCompany.setEmail(company.get("email"));
-        newCompany.setCnpj(company.get("cnpj"));
-        User user = new User();
-        user.setId(Long.parseLong(company.get("user")));
-        newCompany.setUser_create(user);
-        try {
-            companyRepository.save(newCompany);
-            return new ResponseEntity<>(newCompany, HttpStatus.CREATED);
-        }catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        if(company.containsKey("name") && company.containsKey("email") && company.containsKey("user")) {
+            Company newCompany = new Company();
+            newCompany.setStatus(CompanyStatus.ATIVO);
+            newCompany.setCompany_name(company.get("name"));
+            newCompany.setEmail(company.get("email"));
+            if(company.containsKey("cnpj")) {
+                newCompany.setCnpj(company.get("cnpj"));
+            }
+            User user = new User();
+            user.setId(Long.parseLong(company.get("user")));
+            newCompany.setUser_create(user);
+            try {
+                companyRepository.save(newCompany);
+                return new ResponseEntity<>(newCompany, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -44,7 +50,7 @@ public class CompanyController {
     {
         Optional<Company> company = companyRepository.findById(id);
         if(company.isPresent()) {
-            return new ResponseEntity<Company>(company.get(), HttpStatus.OK);
+            return new ResponseEntity<>(company.get(), HttpStatus.OK);
         }else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -53,11 +59,11 @@ public class CompanyController {
     @RequestMapping(value = "/companies", method = RequestMethod.GET)
     public ResponseEntity<List<Company>> GetAllCompanies()
     {
-        List<Company> companies = companyRepository.getAllActiveCompanies();
-        if(!companies.isEmpty()) {
-            return new ResponseEntity<List<Company>>(companies, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        try{
+            List<Company> companies = companyRepository.getAllActiveCompanies();
+            return new ResponseEntity<>(companies, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -65,27 +71,35 @@ public class CompanyController {
     public ResponseEntity<Company> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newCompany)
     {
         Optional<Company> oldCompany = companyRepository.findById(id);
-        if(oldCompany.isPresent()){
-            Company company = oldCompany.get();
-            company.setEmail(newCompany.get("email"));
-            company.setCompany_name(newCompany.get("name"));
-            if(newCompany.get("cnpj") != null){
-                company.setCnpj(newCompany.get("cnpj"));
+        if(newCompany.containsKey("email") && newCompany.containsKey("name")){
+            if (oldCompany.isPresent()) {
+                Company company = oldCompany.get();
+                company.setEmail(newCompany.get("email"));
+                company.setCompany_name(newCompany.get("name"));
+                if (newCompany.get("cnpj") != null) {
+                    company.setCnpj(newCompany.get("cnpj"));
+                }
+                try {
+                    companyRepository.save(company);
+                    return new ResponseEntity<>(company, HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            companyRepository.save(company);
-            return new ResponseEntity<>(company, HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
     @RequestMapping(value = "/company/{id}/users", method = RequestMethod.GET)
     public ResponseEntity<List<User>> GetCompanyUsersByCompanyId(@PathVariable(value = "id") long id) {
-        List<User> users = companyRepository.findCompanyUsersByCompanyId(id);
-        if (!users.isEmpty()) {
+        try {
+            List<User> users = companyRepository.findCompanyUsersByCompanyId(id);
             return new ResponseEntity<>(users, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

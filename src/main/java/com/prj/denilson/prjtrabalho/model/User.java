@@ -1,10 +1,8 @@
 package com.prj.denilson.prjtrabalho.model;
 
-import org.springframework.lang.Nullable;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -16,7 +14,7 @@ public class User {
     private String email;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String phone; //TODO: não usar tipo primitivo
     @Column(nullable = false)
     private String name;
@@ -26,9 +24,6 @@ public class User {
 
     @Enumerated(EnumType.ORDINAL)
     private UserStatus status = UserStatus.ATIVO;
-
-    @Column
-    private String pathImage;
 
     public User(){
     }
@@ -88,14 +83,6 @@ public class User {
 
     public UserType getType() {
         return type;
-    }
-
-    public String getPathImage() {
-        return pathImage;
-    }
-
-    public void setPathImage(String pathImage) {
-        this.pathImage = pathImage;
     }
 
     public void hidePassword() {

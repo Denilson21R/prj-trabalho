@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @CrossOrigin("http://localhost:4200")
@@ -23,17 +21,74 @@ public class ScheduleController {
     @RequestMapping(value = "/schedules/client/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<Schedule>> GetByClientId(@PathVariable(value = "id") long id)
     {
-        List<Schedule> schedules = scheduleRepository.findSchedulesByAnimalOwner(id);
-        return new ResponseEntity<>(schedules, HttpStatus.OK);
+        try {
+            List<Schedule> schedules = scheduleRepository.findSchedulesByAnimalOwner(id);
+            return new ResponseEntity<>(schedules, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @RequestMapping(value = "/schedule/{id}", method = RequestMethod.GET)
     public ResponseEntity<Schedule> GetById(@PathVariable(value = "id") long id)
     {
-        Optional<Schedule> schedule = scheduleRepository.findById(id);
-        if(schedule.isPresent()) {
-            return new ResponseEntity<Schedule>(schedule.get(), HttpStatus.OK);
-        }else {
+        try {
+            Optional<Schedule> schedule = scheduleRepository.findById(id);
+            if(schedule.isPresent()) {
+                return new ResponseEntity<>(schedule.get(), HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(value = "/schedule", method = RequestMethod.POST)
+    public ResponseEntity<Schedule> Post(@RequestParam Map<String, String> newSchedule) {
+        if (newSchedule.containsKey("services")
+        && newSchedule.containsKey("amount")
+        && newSchedule.containsKey("date")
+        && newSchedule.containsKey("animal")
+        && newSchedule.containsKey("company")
+        && newSchedule.containsKey("employee_schedule")){
+            Schedule schedule = new Schedule();
+            fillScheduleData(newSchedule, schedule);
+            //services
+            List<Service> newServices = new ArrayList<>();
+            String servicesString = newSchedule.get("services");
+            convertServicesIdStringToObjects(servicesString, newServices);
+            schedule.setService(newServices);
+            try {
+                scheduleRepository.save(schedule);
+                return new ResponseEntity<>(schedule, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    @RequestMapping(value = "/schedule/{id}", method =  RequestMethod.PUT)
+    public ResponseEntity<Schedule> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newSchedule)
+    {
+        Optional<Schedule> oldSchedule = scheduleRepository.findById(id);
+        if(oldSchedule.isPresent()){
+            Schedule schedule = oldSchedule.get();
+            if(newSchedule.get("status") != null){
+                schedule.setStatus(ScheduleStatus.values()[Integer.parseInt(newSchedule.get("status"))]);
+            }
+            if(newSchedule.get("paid") != null){
+                schedule.setPaid(Boolean.parseBoolean(newSchedule.get("paid")));
+            }
+            try {
+                scheduleRepository.save(schedule);
+                return new ResponseEntity<>(schedule, HttpStatus.OK);
+            }catch (Exception e){
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -54,47 +109,6 @@ public class ScheduleController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-    }
-
-    @RequestMapping(value = "/schedule", method = RequestMethod.POST)
-    public ResponseEntity<Schedule> Post(@RequestParam Map<String, String> newSchedule)
-    {
-        Schedule schedule = new Schedule();
-        fillScheduleData(newSchedule, schedule);
-        //services
-        String servicesString = newSchedule.get("services");
-        List<Service> newServices = new ArrayList<>();
-        convertServicesIdStringToObjects(servicesString, newServices);
-        schedule.setService(newServices);
-        try {
-            scheduleRepository.save(schedule);
-            return new ResponseEntity<>(schedule, HttpStatus.CREATED);
-        }catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @RequestMapping(value = "/schedule/{id}", method =  RequestMethod.PUT)
-    public ResponseEntity<Schedule> Put(@PathVariable(value = "id") long id, @RequestParam Map<String, String> newSchedule)
-    {
-        Optional<Schedule> oldSchedule = scheduleRepository.findById(id);
-        if(oldSchedule.isPresent()){
-            Schedule schedule = oldSchedule.get();
-            if(newSchedule.get("status") != null){
-                schedule.setStatus(ScheduleStatus.values()[Integer.parseInt(newSchedule.get("status"))]);
-            }
-            if(newSchedule.get("paid") != null){
-                schedule.setPaid(Boolean.parseBoolean(newSchedule.get("paid")));
-            }
-            try {
-                scheduleRepository.save(schedule);
-                return new ResponseEntity<>(schedule, HttpStatus.OK);
-            }catch (Exception e){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 
     @RequestMapping(value = "/schedules/company/{id}/quantity",method = RequestMethod.GET)
@@ -182,10 +196,12 @@ public class ScheduleController {
 
     private static void convertServicesIdStringToObjects(String servicesString, List<Service> newServices) {
         String[] servicesList = servicesString.split(", ");
-        for (String newServiceId: servicesList) {
-            Service newServiceObject = new Service();
-            newServiceObject.setId(Long.parseLong(newServiceId));
-            newServices.add(newServiceObject);
+        for (String newServiceId : servicesList) {
+            if(!newServiceId.equals("")) {
+                Service newServiceObject = new Service();
+                newServiceObject.setId(Long.parseLong(newServiceId));
+                newServices.add(newServiceObject);
+            }
         }
     }
 }

@@ -21,34 +21,41 @@ public class ServiceRequestController {
     @RequestMapping(value = "/service-request", method = RequestMethod.POST)
     public ResponseEntity<ServiceRequest> addInvite(@RequestParam Map<String, String> invite)
     {
-        ServiceRequest serviceRequest = new ServiceRequest();
-        //animal
-        Animal animal = new Animal();
-        animal.setId(Long.parseLong(invite.get("animal")));
-        serviceRequest.setAnimal(animal);
-        //status
-        serviceRequest.setStatus(ServiceRequestStatus.ABERTO);
-        //datecreate
-        serviceRequest.setCreatedDate(LocalDateTime.now());
-        //company
-        Company company = new Company();
-        company.setId(Integer.parseInt(invite.get("company")));
-        serviceRequest.setCompany(company);
-        //user
-        User user = new User();
-        user.setId(Integer.parseInt(invite.get("user")));
-        serviceRequest.setClient(user);
-        //servicedatetime
-        String[] dateTime = invite.get("date").split("T"); //arrays date e time
-        LocalDateTime dateService = getLocalDateTime(dateTime);
-        serviceRequest.setServiceDate(dateService);
-        //requestdatetime
-        serviceRequest.setCreatedDate(LocalDateTime.now());
-        try {
-            ServiceRequest newServiceRequest = serviceRequestRepository.save(serviceRequest);
-            return new ResponseEntity<>(newServiceRequest, HttpStatus.CREATED);
-        }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        if(invite.containsKey("animal")
+            && invite.containsKey("company")
+            && invite.containsKey("user")
+            && invite.containsKey("date")) {
+            ServiceRequest serviceRequest = new ServiceRequest();
+            //animal
+            Animal animal = new Animal();
+            animal.setId(Long.parseLong(invite.get("animal")));
+            serviceRequest.setAnimal(animal);
+            //status
+            serviceRequest.setStatus(ServiceRequestStatus.ABERTO);
+            //datecreate
+            serviceRequest.setCreatedDate(LocalDateTime.now());
+            //company
+            Company company = new Company();
+            company.setId(Integer.parseInt(invite.get("company")));
+            serviceRequest.setCompany(company);
+            //user
+            User user = new User();
+            user.setId(Integer.parseInt(invite.get("user")));
+            serviceRequest.setClient(user);
+            //servicedatetime
+            String[] dateTime = invite.get("date").split("T"); //arrays date e time
+            LocalDateTime dateService = getLocalDateTime(dateTime);
+            serviceRequest.setServiceDate(dateService);
+            //requestdatetime
+            serviceRequest.setCreatedDate(LocalDateTime.now());
+            try {
+                ServiceRequest newServiceRequest = serviceRequestRepository.save(serviceRequest);
+                return new ResponseEntity<>(newServiceRequest, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
@@ -79,7 +86,7 @@ public class ServiceRequestController {
                 serviceRequestRepository.save(newServiceRequest);
                 return new ResponseEntity<>(newServiceRequest, HttpStatus.OK);
             }catch (Exception e){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,52 +96,46 @@ public class ServiceRequestController {
     @RequestMapping(value = "/service-request/{id}/services", method =  RequestMethod.PATCH)
     public ResponseEntity<ServiceRequest> Patch(@PathVariable(value = "id") long id, @RequestParam Map<String, String> services)
     {
-        Optional<ServiceRequest> oldRequest = serviceRequestRepository.findById(id);
-        if(oldRequest.isPresent()){
-            List<Service> newServices = new ArrayList<>();
-            ServiceRequest newServiceRequest = oldRequest.get();
-            convertServicesIdStringToObjects(services, newServices);
-            newServiceRequest.setRequested_services(newServices);
-            try {
-                ServiceRequest serviceSaved = serviceRequestRepository.save(newServiceRequest);
-                return new ResponseEntity<>(serviceSaved, HttpStatus.OK);
-            }catch (Exception e){
+        if(services.containsKey("services")) {
+            Optional<ServiceRequest> oldRequest = serviceRequestRepository.findById(id);
+            if (oldRequest.isPresent()) {
+                List<Service> newServices = new ArrayList<>();
+                ServiceRequest newServiceRequest = oldRequest.get();
+                convertServicesIdStringToObjects(services, newServices);
+                newServiceRequest.setRequested_services(newServices);
+                try {
+                    ServiceRequest serviceSaved = serviceRequestRepository.save(newServiceRequest);
+                    return new ResponseEntity<>(serviceSaved, HttpStatus.OK);
+                } catch (Exception e) {
+                    return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    private static void convertServicesIdStringToObjects(Map<String, String> services, List<Service> newServices) {
-        String servicesString = services.get("services");
-        String[] servicesList = servicesString.split(", ");
-        for (String newServiceId: servicesList) {
-            Service newServiceObject = new Service();
-            newServiceObject.setId(Long.parseLong(newServiceId));
-            newServices.add(newServiceObject);
+            return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
     @RequestMapping(value = "/requests/company/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<ServiceRequest>> GetByCompanyId(@PathVariable(value = "id") long id)
     {
-        List<ServiceRequest> invites = serviceRequestRepository.findRequestsByCompanyId(id);
-        if(!invites.isEmpty()) {
+        try {
+            List<ServiceRequest> invites = serviceRequestRepository.findRequestsByCompanyId(id);
             return new ResponseEntity<>(invites, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @RequestMapping(value = "/requests/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<List<ServiceRequest>> GetByUserId(@PathVariable(value = "id") long id)
     {
-        List<ServiceRequest> requests = serviceRequestRepository.findRequestsByUserId(id);
-        if(!requests.isEmpty()) {
+        try {
+            List<ServiceRequest> requests = serviceRequestRepository.findRequestsByUserId(id);
             return new ResponseEntity<>(requests, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -159,6 +160,18 @@ public class ServiceRequestController {
             return new ResponseEntity<>(qtd_requests, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private static void convertServicesIdStringToObjects(Map<String, String> services, List<Service> newServices) {
+        String servicesString = services.get("services");
+        String[] servicesList = servicesString.split(", ");
+        for (String newServiceId: servicesList) {
+            if (!Objects.equals(newServiceId, "")){
+                Service newServiceObject = new Service();
+                newServiceObject.setId(Long.parseLong(newServiceId));
+                newServices.add(newServiceObject);
+            }
         }
     }
 
